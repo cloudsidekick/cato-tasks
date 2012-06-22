@@ -1,7 +1,7 @@
 cato-tasks
 ==========
 
-Example tasks for Cato
+Example tasks for Cato v1.0.9 and later. 
 
 This repo contains sample tasks that can be used as a tutorial for learning Cato task development. 
 
