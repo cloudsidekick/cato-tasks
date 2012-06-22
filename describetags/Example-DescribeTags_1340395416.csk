@@ -1,0 +1,93 @@
+<tasks><task code="ex-002" concurrent_instances="" name="Example - DescribeTags" on_conflict="cancel" original_task_id="7836e7ac-a83a-40f8-be97-c5cd89219df4" queue_depth="" status="Development" version="1.000"><description>An example of how to use the DescribeTags command for AWS.</description><codeblocks><codeblock name="MAIN"><steps><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">First do a describe tags on the api endpoint and put the resulting xml in a variable called "result".</comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="aws_ec2_DescribeTags">
+					<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region" />
+					<Filter.n is_array="true">
+						<Filter>
+							<Name input_type="text" />
+							<Value.m is_array="true">
+								<Value input_type="text" />
+							</Value.m>
+						</Filter>
+					</Filter.n>
+					<result_name break_before="true" input_type="text" label="Result Variable">result</result_name>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="if">
+					<tests>
+						<test>
+							<eval>{[[result.count(//item/resourceId)]]} == {}</eval>
+							<action><function name="log_msg">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">no tags where found. Add some tags to an EC2 instance and rerun.</message>
+				</function></action>
+						</test>
+					</tests>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">Next loop through the results, the xpath function "count" return the number of times the path //item/resourceId appears in the xml. We'll spin through the loop that many times. z is the counter variable. 
+See http://www.w3schools.com/xpath/ for more on xpath queries.</comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="loop">
+					<start input_type="text">1</start>
+					<counter input_type="text">z</counter>
+					<test input_type="select">&lt;=</test>
+					<compare_to input_type="text">[[result.count(//item/resourceId)]]</compare_to>
+					<increment input_type="text">1</increment>
+					<action><function name="log_msg">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">id = [[result.//item[ [[z]] ]//resourceId]], type = [[result.//item[ [[z]] ]//resourceType]], key = [[result.//item[ [[z]] ]//key]], value = [[result.//item[ [[z]] ]//value]]</message>
+				</function></action>
+					<max input_type="text" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">Now we'll put the first key, value found into variables. </comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="set_variable">
+					<variables label="Variables">
+						<variable label="Variable">
+							<name input_type="text" label="Name">key</name>
+							<value input_type="text" label="Value">[[result.//item//key]]</value>
+							<modifier input_type="select" label="Modifier">DEFAULT</modifier>
+						</variable>
+					<variable label="Variable">
+							<name input_type="text" label="Name">value</name>
+							<value input_type="text" label="Value">[[result.//item//value]]</value>
+							<modifier input_type="select" label="Modifier">DEFAULT</modifier>
+						</variable></variables>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">If the variable key is populated, we will run the DescribeTags again just on that key value pair.</comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="if">
+					<tests>
+						<test>
+							<eval>{[[key]]} &gt; {}</eval>
+							<action><function name="aws_ec2_DescribeTags">
+					<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region" />
+					<Filter.n is_array="true">
+						<Filter>
+							<Name input_type="text">key</Name>
+							<Value.m is_array="true">
+								<Value input_type="text">[[key]]</Value>
+							</Value.m>
+						</Filter>
+					<Filter>
+							<Name input_type="text">value</Name>
+							<Value.m is_array="true">
+								<Value input_type="text">[[value]]</Value>
+							</Value.m>
+						</Filter></Filter.n>
+					<result_name break_before="true" input_type="text" label="Result Variable" />
+				</function></action>
+						</test>
+					</tests>
+				<else input_type="text"><function name="log_msg">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">no tags where found. Add some tags to an EC2 instance and rerun.</message>
+				</function></else></function></step><step codeblock="MAIN" commented="true" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="aws_ec2_DescribeTags">
+					<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region" />
+					<Filter.n is_array="true">
+						<Filter>
+							<Name input_type="text">key</Name>
+							<Value.m is_array="true">
+								<Value input_type="text">[[key]]</Value>
+							</Value.m>
+						</Filter>
+					<Filter>
+							<Name input_type="text">value</Name>
+							<Value.m is_array="true">
+								<Value input_type="text">[[value]]</Value>
+							</Value.m>
+						</Filter></Filter.n>
+					<result_name break_before="true" input_type="text" label="Result Variable" />
+				</function></step></steps></codeblock></codeblocks></task></tasks>
