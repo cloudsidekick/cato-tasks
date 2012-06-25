@@ -1,0 +1,128 @@
+<tasks><task code="ex-003" concurrent_instances="" name="Example Http and SimpleDB" on_conflict="cancel" original_task_id="70dd7f69-1e8c-4ca3-85f6-1f797ef73cba" queue_depth="" status="Development" version="1.000"><description>Creates a SimpleDB domain and adds items with attributes then loops through one of the items and prints to the log. Deletes the domain at the end. Shows how to use Xpath to loop through the results of an AWS query. Shows the http command to pull data.</description><codeblocks><codeblock name="MAIN"><steps><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">The global variable _UUID will generate a fresh uuid. Wikipedia uuid.</comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="set_variable">
+					<variables label="Variables">
+						<variable label="Variable">
+							<name input_type="text" label="Name">domain</name>
+							<value input_type="text" label="Value">Tarp-[[_UUID]]</value>
+							<modifier input_type="select" label="Modifier">DEFAULT</modifier>
+						</variable>
+					</variables>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">Create a new SimpleDB domain with the unique name.</comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="aws_sdb_CreateDomain">
+					<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region" />
+					<DomainName input_type="text">[[domain]]</DomainName>
+					<result_name break_before="true" input_type="text" label="Result Variable" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">Pull down the test data from github. It's csv so we will parse the data into variable arrays.
+This is a subset of the original data. If you want a larger dataset, change the url to:
+http://subsidyscope.org/media/data/bailout/tarp_transactions.csv</comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="44" output_parse_type="2" output_row_delimiter="10"><description /><function col_delimiter="44" name="http" parse_method="2" row_delimiter="10" variables="true">
+					<type dataset="GET|POST" datasource="local" input_type="dropdown" label="Request Type">GET</type>
+					<url class="w95pct" input_type="textarea" label="URL" label_style="display: block;" required="true" rows="1">https://raw.github.com/cloudsidekick/cato-tasks/master/httpandsimpledb/tarp_trans.csv</url>
+					<pairs is_array="true" label="Parameters">
+						<pair label="Parameter">
+							<key input_type="text" label="Name" />
+							<value class="w50pct" input_type="text" label="Value" />
+							<mask input_type="checkbox" label="Mask?" />
+						</pair>
+					</pairs>
+				<step_variables><variable><name>date</name><type>delimited</type><position>1</position></variable><variable><name>city</name><type>delimited</type><position>12</position></variable><variable><name>state</name><type>delimited</type><position>13</position></variable><variable><name>recipient</name><type>delimited</type><position>2</position></variable><variable><name>amount</name><type>delimited</type><position>3</position></variable></step_variables></function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">Loop through the results from the csv file and shove it into the SimpleDB domain.</comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="loop">
+					<start input_type="text">2</start>
+					<counter input_type="text">z</counter>
+					<test input_type="select">&lt;</test>
+					<compare_to input_type="text">[[recipient,*]]</compare_to>
+					<increment input_type="text">1</increment>
+					<action><function name="aws_sdb_PutAttributes">
+					<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region" />
+					<DomainName input_type="text">[[domain]]</DomainName>
+					<ItemName input_type="text">record_[[z]]</ItemName>
+					<Attribute.X is_array="true">
+						<Attribute>
+							<Name input_type="text">date</Name>
+							<Value input_type="text">[[date,[[z]]]]</Value>
+							<Replace input_type="text">true</Replace>
+						</Attribute>
+					<Attribute>
+							<Name input_type="text">amount</Name>
+							<Value input_type="text">[[amount,[[z]]]]</Value>
+							<Replace input_type="text">true</Replace>
+						</Attribute><Attribute>
+							<Name input_type="text">city</Name>
+							<Value input_type="text">[[city,[[z]]]]</Value>
+							<Replace input_type="text">true</Replace>
+						</Attribute><Attribute>
+							<Name input_type="text">state</Name>
+							<Value input_type="text">[[state,[[z]]]]</Value>
+							<Replace input_type="text">true</Replace>
+						</Attribute><Attribute>
+							<Name input_type="text">recipient</Name>
+							<Value input_type="text">[[recipient,[[z]]]]</Value>
+							<Replace input_type="text">true</Replace>
+						</Attribute></Attribute.X>
+					<Expected.X is_array="true">
+						<Expected>
+							<Name input_type="text" />
+							<Value input_type="text" />
+							<Exists input_type="text" />
+						</Expected>
+					</Expected.X>
+					<result_name break_before="true" input_type="text" label="Result Variable" />
+				</function></action>
+					<max input_type="text" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">Setup a variable that will contain the sql for a SimpleDB select.</comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="set_variable">
+					<variables label="Variables">
+						<variable label="Variable">
+							<name input_type="text" label="Name">sql</name>
+							<value input_type="text" label="Value">select amount from `[[domain]]` where recipient = 'General Motors Corporation'</value>
+							<modifier input_type="select" label="Modifier">DEFAULT</modifier>
+						</variable>
+					</variables>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">Use the SimpleDB select command to get all General Motors tarp data.</comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="aws_sdb_Select">
+					<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region" />
+					<SelectExpression input_type="text">[[sql]]</SelectExpression>
+					<ConsistentRead input_type="text" />
+					<NextToken input_type="text" />
+					<result_name break_before="true" input_type="text" label="Result Variable">gm</result_name>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">Since this is an example, go ahead and delete the domain.</comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="aws_sdb_DeleteDomain">
+					<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region" />
+					<DomainName input_type="text">[[domain]]</DomainName>
+					<result_name break_before="true" input_type="text" label="Result Variable" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="set_variable">
+					<variables label="Variables">
+						<variable label="Variable">
+							<name input_type="text" label="Name">total</name>
+							<value input_type="text" label="Value">0</value>
+							<modifier input_type="select" label="Modifier">DEFAULT</modifier>
+						</variable>
+					</variables>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">Now that we have all GM's data, loop through the xml and total the amount they took from the government. </comment>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="loop">
+					<start input_type="text">1</start>
+					<counter input_type="text">z</counter>
+					<test input_type="select">&lt;=</test>
+					<compare_to input_type="text">[[gm.count(//Item/Attribute)]]</compare_to>
+					<increment input_type="text">1</increment>
+					<action><function name="set_variable">
+					<variables label="Variables">
+						<variable label="Variable">
+							<name input_type="text" label="Name">total</name>
+							<value input_type="text" label="Value">csk_calc([[total]] + [[gm.//Item[ [[z]] ]/Attribute/Value]])</value>
+							<modifier input_type="select" label="Modifier">DEFAULT</modifier>
+						</variable>
+					</variables>
+				</function></action>
+					<max input_type="text" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="log_msg">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">General Motors received $[[total]] in Tarp money from Uncle Sam.</message>
+				</function></step></steps></codeblock></codeblocks></task></tasks>
