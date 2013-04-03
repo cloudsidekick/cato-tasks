@@ -1,4 +1,4 @@
-<tasks><task code="ex-003" concurrent_instances="" name="Example Http and SimpleDB" on_conflict="cancel" original_task_id="70dd7f69-1e8c-4ca3-85f6-1f797ef73cba" queue_depth="" status="Development" version="1.000"><description>Creates a SimpleDB domain and adds items with attributes then loops through one of the items and prints to the log. Deletes the domain at the end. Shows how to use Xpath to loop through the results of an AWS query. Shows the http command to pull data.</description><codeblocks><codeblock name="MAIN"><steps><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+<tasks><task code="ex-003" concurrent_instances="" name="Example - Http and SimpleDB" on_conflict="cancel" original_task_id="70dd7f69-1e8c-4ca3-85f6-1f797ef73cba" queue_depth="" status="Development" version="1.000"><description>Creates a SimpleDB domain and adds items with attributes then loops through one of the items and prints to the log. Deletes the domain at the end. Shows how to use Xpath to loop through the results of an AWS query. Shows the http command to pull data.</description><codeblocks><codeblock name="MAIN"><steps><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
 					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">The global variable _UUID will generate a fresh uuid. Wikipedia uuid.</comment>
 				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="set_variable">
 					<variables label="Variables">
@@ -117,8 +117,8 @@ http://subsidyscope.org/media/data/bailout/tarp_transactions.csv</comment>
 					<variables label="Variables">
 						<variable label="Variable">
 							<name input_type="text" label="Name">total</name>
-							<value input_type="text" label="Value">csk_calc([[total]] + [[gm.//Item[ [[z]] ]/Attribute/Value]])</value>
-							<modifier input_type="select" label="Modifier">DEFAULT</modifier>
+							<value input_type="text" label="Value">[[total]] + [[gm.//Item/Attribute/Value,[[z]]]]</value>
+							<modifier input_type="select" label="Modifier">Math</modifier>
 						</variable>
 					</variables>
 				</function></action>

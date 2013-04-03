@@ -23,8 +23,12 @@
 							<modifier input_type="select">FROM_BASE64</modifier>
 						</variable><variable>
 							<name input_type="text">y</name>
-							<value input_type="text">number</value>
+							<value input_type="text">value</value>
 							<modifier input_type="select">DEFAULT</modifier>
+						</variable><variable label="Variable">
+							<name input_type="text" label="Name">z,6</name>
+							<value input_type="text" label="Value">2 * (3 + 3) - 1</value>
+							<modifier input_type="select" label="Modifier">Math</modifier>
 						</variable></variables>
 				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="loop">
 					<start input_type="text">1</start>
@@ -33,7 +37,7 @@
 					<compare_to input_type="text">[[z,*]]</compare_to>
 					<increment input_type="text">1</increment>
 					<action><function name="log_msg">
-					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">The [[y]] in variable z is [[z,[[a]]]]</message>
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">The [[y]] in variable z,[[a]] is [[z,[[a]]]]</message>
 				</function></action>
 					<max input_type="text" />
 				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="loop">

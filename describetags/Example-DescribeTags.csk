@@ -14,13 +14,15 @@
 				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="if">
 					<tests>
 						<test>
-							<eval>{[[result.count(//item/resourceId)]]} == {}</eval>
+							<eval>[[result.count(//item/resourceId)]] == 0</eval>
 							<action><function name="log_msg">
 					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">no tags where found. Add some tags to an EC2 instance and rerun.</message>
 				</function></action>
 						</test>
 					</tests>
-				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
+				<else input_type="text"><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">the number of tags found: [[result.count(//item/resourceId)]]</message>
+				</function></else></function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
 					<comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">Next loop through the results, the xpath function "count" return the number of times the path //item/resourceId appears in the xml. We'll spin through the loop that many times. z is the counter variable. 
 See http://www.w3schools.com/xpath/ for more on xpath queries.</comment>
 				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="loop">
@@ -30,7 +32,7 @@ See http://www.w3schools.com/xpath/ for more on xpath queries.</comment>
 					<compare_to input_type="text">[[result.count(//item/resourceId)]]</compare_to>
 					<increment input_type="text">1</increment>
 					<action><function name="log_msg">
-					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">id = [[result.//item[ [[z]] ]//resourceId]], type = [[result.//item[ [[z]] ]//resourceType]], key = [[result.//item[ [[z]] ]//key]], value = [[result.//item[ [[z]] ]//value]]</message>
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">id = [[result.//item/resourceId,[[z]]]], type = [[result.//item/resourceType,[[z]]]], key = [[result.//item/key,[[z]]]], value = [[result.//item/value,[[z]]]]</message>
 				</function></action>
 					<max input_type="text" />
 				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="comment">
@@ -52,7 +54,7 @@ See http://www.w3schools.com/xpath/ for more on xpath queries.</comment>
 				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="if">
 					<tests>
 						<test>
-							<eval>{[[key]]} &gt; {}</eval>
+							<eval>"[[key]]" &gt; ""</eval>
 							<action><function name="aws_ec2_DescribeTags">
 					<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region" />
 					<Filter.n is_array="true">
