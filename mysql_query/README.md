@@ -66,11 +66,3 @@ The comma and star tell the variable substitution logic to replace the variable 
 
 The **last step** uses the **Drop Connection** command and accepts a connection name as it's parameter. This will close out the connection. This step is unnecessary in this task, but shows an example of closing the connection out. When a task finishes, all connections are dropped. However in a long running task it may make sense to drop and recreate connections as needed.
 
-We will loop through the results returned from AWS, the xpath function "count" return the number of times the path //regionInfo/item appears in the xml. We'll spin through the loop that many times. z is the counter variable. 
-See http://www.w3schools.com/xpath/ for more on xpath queries.
-
-Inside the loop the task has a Codeblock step. A codeblock is sort of a procedure that can be reused within this task. All variables in a task are global in scope so whatever variables are set before, during and after the codeblock will be accessible. In this case the "process_region" codeblock will be called.
-
-To view the codeblock steps, scroll up to the top of the page and hover over the icon next to "MAIN". This will drop down the list of codeblocks available in this task. Select "process_region" and the view will change. 
-
-In this codeblock the steps will query each region and generate a list of EC2 instances in each region. For specifics on each step, click on the "Notes" icon on the bottom of each step. Notes are user definable comments that can be used to document a task. For the rest of this example, refer to the "Notes". 
