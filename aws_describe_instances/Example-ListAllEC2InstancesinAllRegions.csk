@@ -1,0 +1,59 @@
+<tasks><task code="ex-004" concurrent_instances="" name="Example - List All EC2 Instances in All Regions" on_conflict="cancel" original_task_id="552619d4-bada-11e1-bcc1-c8bcc89d4845" queue_depth="" status="Development" version="1.000"><description>This sample task spins through all of the Amazon EC2 regions and retrieves the instance id and status for all EC2 instance. The output is displayed at the end of the task run. </description><parameters>
+  </parameters><codeblocks><codeblock name="process_region"><steps><step codeblock="process_region" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>As a convenience, set the variable region to the value in this iteration of the xml </description><function name="set_variable">
+					<variables label="Variables">
+						<variable label="Variable">
+							<name input_type="text" label="Name">region</name>
+							<value input_type="text" label="Value">[[regions.//regionInfo/item/regionName,[[n]]]]</value>
+							<modifier input_type="select" label="Modifier">DEFAULT</modifier>
+						</variable>
+					</variables>
+				</function></step><step codeblock="process_region" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>DescribeInstance on the region with no filters</description><function name="aws_ec2_DescribeInstances">
+					<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region">[[region]]</aws_region>
+					<InstanceId.n is_array="true">
+						<InstanceId input_type="text" />
+					</InstanceId.n>
+					<Filter.n is_array="true">
+						<Filter>
+							<Name input_type="text" />
+							<Value.m is_array="true">
+								<Value input_type="text" />
+							</Value.m>
+						</Filter>
+					</Filter.n>
+					<result_name break_before="true" input_type="text" label="Result Variable">result</result_name>
+				</function></step><step codeblock="process_region" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Another example of retrieving the count from the XML</description><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">The number of instances in region [[region]] is [[result.count(//instancesSet/item)]]</message>
+				</function></step><step codeblock="process_region" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Spinning through the ec2 instances in this region and populating a variable</description><function name="loop">
+					<start input_type="text">1</start>
+					<counter input_type="text">z</counter>
+					<test input_type="select">&lt;=</test>
+					<compare_to input_type="text">[[result.count(//instancesSet/item)]]</compare_to>
+					<increment input_type="text">1</increment>
+					<action><function name="set_variable">
+					<variables>
+						<variable>
+							<name input_type="text">output</name>
+							<value input_type="text">[[output]][[region]] - [[result.//instancesSet/item/instanceId,[[z]]]], [[result.//instancesSet/item/instanceState/name,[[z]]]]
+</value>
+							<modifier input_type="select">DEFAULT</modifier>
+						</variable>
+					</variables>
+				</function></action>
+					<max input_type="text" />
+				</function></step></steps></codeblock><codeblock name="MAIN"><steps><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Get a list of all regions from Amazon.</description><function name="aws_ec2_DescribeRegions">
+					<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region" />
+					<RegionName.n is_array="true">
+						<RegionName input_type="text" />
+					</RegionName.n>
+					<Filter.n is_array="true">
+						<Filter>
+							<Name input_type="text" />
+							<Value.m is_array="true">
+								<Value input_type="text" />
+							</Value.m>
+						</Filter>
+					</Filter.n>
+					<result_name break_before="true" input_type="text" label="Result Variable">regions</result_name>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Based on the number of regions, loop into a codeblock to query the regions.</description><function name="loop"><start input_type="text">1</start><counter input_type="text">n</counter><test input_type="select">&lt;=</test><compare_to input_type="text">[[regions.count(//regionInfo/item)]]</compare_to><increment input_type="text">1</increment><action><function name="codeblock" snip="codeblock">
+					<codeblock input_type="text">process_region</codeblock>
+				</function></action><max input_type="text" /></function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Display all of the instance ids, their region and status</description><function name="log_msg"><message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">[[output]]</message></function></step></steps></codeblock></codeblocks></task></tasks>
