@@ -35,10 +35,10 @@ The total number of results from the select are determined with:
 
     [[gm.count(//Item/Attribute)]]
 
-The **Set Variable** command in the loop sets the total variable using the following:
+The **Set Variable** command with the **math** modifier in the loop sets the total variable using the following:
 
-    csk_calc([[total]] + [[gm.//Item[ [[z]] ]/Attribute/Value]])
+    [[total]] + [[gm.//Item/Attribute/Value,[[z]]]]
 
-The **csk_calc** function tells the Task Engine to perform math. The xpath query "gm.//Item[ [[z]] ]/Attribute/Value" will get the amount values out of the xml.
+The **math** modifier tells the Task Engine to perform math after variable substitution and put the result in the variable. The xpath query "gm.//Item/Attribute/Value[[z]]" will get the amount value out of the xml for the particular loop iteration. 
 
 **Log Message** is used to display the total amount calculated. 
