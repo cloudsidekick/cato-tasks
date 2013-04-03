@@ -1,0 +1,47 @@
+<tasks><task code="ex-007" concurrent_instances="" name="Example - Run Task A" on_conflict="cancel" original_task_id="c7c3ff3d-f5d7-4d1a-9349-5889ed95e15a" queue_depth="" status="Development" version="1.000"><description>This example shows how a parent task can run control the execution of other tasks. This is useful for creating workflows or spawning tasks to execute in parallel. </description><parameters><parameter constraint="[0-9]*" constraint_msg="integer only" encrypt="false" id="p_babf2d4f-9c82-11e2-8430-c8bcc89d4845" maxlength="" maxvalue="" minlength="" minvalue="" prompt="true" required="true"><name>task1_sleep</name><desc>Number of seconds to sleep for task one</desc><values present_as="value"><value id="pv_babfe40a-9c82-11e2-a565-c8bcc89d4845">20</value></values></parameter><parameter constraint="[0-9]*" constraint_msg="integer only" encrypt="false" id="p_d033ba5c-9c82-11e2-bddc-c8bcc89d4845" maxlength="" maxvalue="" minlength="" minvalue="" prompt="true" required="true"><name>task2_sleep</name><desc>Number of seconds for task two to sleep</desc><values present_as="value"><value id="pv_d034e242-9c82-11e2-af46-c8bcc89d4845">10</value></values></parameter></parameters><codeblocks><codeblock name="MAIN"><steps><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>running a child task and using handle1, take a look at the parameters</description><function name="run_task">
+					<task_name input_type="text">Example - Run Task B</task_name>
+					<version input_type="text" />
+					<time_to_wait input_type="text" />
+					<on_success input_type="text" />
+					<on_error input_type="text" />
+					<asset_id input_type="text" />
+					<handle input_type="text">handle1</handle>
+					<parameters>
+<parameter id="p_d436e2c2-37de-11e2-aa07-c8bcc89d4845" required="true">
+<name>parameter1</name>
+<values present_as="value">
+<value>[[task1_sleep]]</value>
+</values>
+</parameter>
+</parameters></function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>running a child task and using handle2</description><function name="run_task">
+					<task_name input_type="text">Example - Run Task B</task_name>
+					<version input_type="text" />
+					<time_to_wait input_type="text" />
+					<on_success input_type="text" />
+					<on_error input_type="text" />
+					<asset_id input_type="text" />
+					<handle input_type="text">handle2</handle>
+					<parameters>
+<parameter id="p_d436e2c2-37de-11e2-aa07-c8bcc89d4845" required="true">
+<name>parameter1</name>
+<values present_as="value">
+<value>[[task2_sleep]]</value>
+</values>
+</parameter>
+</parameters></function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>will wait until both child tasks have finished</description><function name="wait_for_tasks">
+					<handles label="Handles">
+						<handle label="Handle">
+							<name input_type="text" label="Name">handle1</name>
+						</handle>
+					<handle label="Handle">
+							<name input_type="text" label="Name">handle2</name>
+						</handle></handles>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>prints out handle attributes</description><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">Handle1 instance: [[#handle1.instance]] and status: [[#handle1.status]], name: [[#handle1.handle_name]], task_id: [[#handle1.task_id]], submitted_by: [[#handle1.submitted_by]], task name:[[#handle1.task_name]], task version: [[#handle1.task_version]], default task version: [[#handle1.default_version]], submitted date: [[#handle1.submitted_dt]], pid: [[#handle1.pid]], task engine node: [[#handle1.cenode]], completed date: [[#handle1.completed_dt]], started date: [[#handle1.started_dt]], asset name: [[#handle1.asset_name]]
+
+Handle2 instance: [[#handle2.instance]] and status: [[#handle2.status]], name: [[#handle2.handle_name]], task_id: [[#handle2.task_id]], submitted_by: [[#handle2.submitted_by]], task name:[[#handle2.task_name]], task version: [[#handle2.task_version]], default task version: [[#handle2.default_version]], submitted date: [[#handle2.submitted_dt]], pid: [[#handle1.pid]], task engine node: [[#handle2.cenode]], completed date: [[#handle2.completed_dt]], started date: [[#handle2.started_dt]], asset name: [[#handle2.asset_name]]</message>
+				</function></step></steps></codeblock></codeblocks></task><task code="ex-008" concurrent_instances="" name="Example - Run Task B" on_conflict="cancel" original_task_id="9c6eb168-a265-4065-9f30-41058adeb22c" queue_depth="" status="Development" version="1.000"><description>This task is the second part of an example which shows how to make use of the Run Task command. This task will run independently of the parent task.</description><parameters><parameter constraint="[0-9]*" constraint_msg="Integer only" encrypt="false" id="p_d436e2c2-37de-11e2-aa07-c8bcc89d4845" maxlength="" maxvalue="" minlength="" minvalue="" prompt="true" required="true"><name>parameter1</name><desc>Number of seconds to sleep. Integer only</desc><values present_as="value"><value id="pv_fdacc3c7-9c7f-11e2-ba90-c8bcc89d4845">20</value></values></parameter></parameters><codeblocks><codeblock name="MAIN"><steps><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">parameter1 is [[parameter1]]</message>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description /><function name="sleep" snip="seconds">
+					<seconds input_type="text" label="Sleep">[[parameter1]]</seconds>
+				</function></step></steps></codeblock></codeblocks></task></tasks>
