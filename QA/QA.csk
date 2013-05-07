@@ -1,0 +1,732 @@
+<tasks>
+    <task code="QA" concurrent_instances="" name="QA - Main" on_conflict="cancel" original_task_id="c644be03-cdee-4ef4-bfbc-92a19d9fe87e" queue_depth="" status="Development" version="1.000">
+        <description>The master control Task for testing all task commands.</description>
+        <codeblocks>
+            <codeblock name="CONTROL">
+                <steps>
+                    <step codeblock="CONTROL" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="run_task">
+                            <task_name input_type="text">QA - Wait For Tasks</task_name>
+                            <version input_type="text" />
+                            <time_to_wait input_type="text" />
+                            <on_success input_type="text" />
+                            <on_error input_type="text" />
+                            <asset_id input_type="text" />
+                            <handle input_type="text">IN_PROGRESS</handle>
+                            <parameters></parameters>
+                        </function>
+                    </step>
+                    <step codeblock="CONTROL" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">check_status</codeblock>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+            <codeblock name="INTERACT">
+                <steps>
+                    <step codeblock="INTERACT" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="run_task">
+                            <task_name input_type="text">QA - SQL Exec</task_name>
+                            <version input_type="text" />
+                            <time_to_wait input_type="text" />
+                            <on_success input_type="text" />
+                            <on_error input_type="text" />
+                            <asset_id input_type="text" />
+                            <handle input_type="text">IN_PROGRESS</handle>
+                            <parameters></parameters>
+                        </function>
+                    </step>
+                    <step codeblock="INTERACT" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">check_status</codeblock>
+                        </function>
+                    </step>
+                    <step codeblock="INTERACT" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="run_task">
+                            <task_name input_type="text">QA - HTTP</task_name>
+                            <version input_type="text" />
+                            <time_to_wait input_type="text" />
+                            <on_success input_type="text" />
+                            <on_error input_type="text" />
+                            <asset_id input_type="text" />
+                            <handle input_type="text">IN_PROGRESS</handle>
+                            <parameters></parameters>
+                        </function>
+                    </step>
+                    <step codeblock="INTERACT" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">check_status</codeblock>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+            <codeblock name="FLOW">
+                <steps>
+                    <step codeblock="FLOW" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="run_task">
+                            <task_name input_type="text">QA - Loop Test</task_name>
+                            <version input_type="text" />
+                            <time_to_wait input_type="text" />
+                            <on_success input_type="text" />
+                            <on_error input_type="text" />
+                            <asset_id input_type="text" />
+                            <handle input_type="text">IN_PROGRESS</handle>
+                            <parameters></parameters>
+                        </function>
+                    </step>
+                    <step codeblock="FLOW" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">check_status</codeblock>
+                        </function>
+                    </step>
+                    <step codeblock="FLOW" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="run_task">
+                            <task_name input_type="text">QA - Subtask A</task_name>
+                            <version input_type="text" />
+                            <time_to_wait input_type="text" />
+                            <on_success input_type="text" />
+                            <on_error input_type="text" />
+                            <asset_id input_type="text" />
+                            <handle input_type="text">IN_PROGRESS</handle>
+                            <parameters></parameters>
+                        </function>
+                    </step>
+                    <step codeblock="FLOW" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">check_status</codeblock>
+                        </function>
+                    </step>
+                    <step codeblock="FLOW" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="run_task">
+                            <task_name input_type="text">QA - While</task_name>
+                            <version input_type="text" />
+                            <time_to_wait input_type="text" />
+                            <on_success input_type="text" />
+                            <on_error input_type="text" />
+                            <asset_id input_type="text" />
+                            <handle input_type="text">IN_PROGRESS</handle>
+                            <parameters></parameters>
+                        </function>
+                    </step>
+                    <step codeblock="FLOW" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">check_status</codeblock>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+            <codeblock name="VARIABLE">
+                <steps>
+                    <step codeblock="VARIABLE" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="run_task">
+                            <task_name input_type="text">QA - Wait For Tasks</task_name>
+                            <version input_type="text" />
+                            <time_to_wait input_type="text" />
+                            <on_success input_type="text" />
+                            <on_error input_type="text" />
+                            <asset_id input_type="text" />
+                            <handle input_type="text">IN_PROGRESS</handle>
+                            <parameters></parameters>
+                        </function>
+                    </step>
+                    <step codeblock="VARIABLE" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">check_status</codeblock>
+                        </function>
+                    </step>
+                    <step codeblock="VARIABLE" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="run_task">
+                            <task_name input_type="text">QA - Datastore</task_name>
+                            <version input_type="text" />
+                            <time_to_wait input_type="text" />
+                            <on_success input_type="text" />
+                            <on_error input_type="text" />
+                            <asset_id input_type="text" />
+                            <handle input_type="text">IN_PROGRESS</handle>
+                            <parameters></parameters>
+                        </function>
+                    </step>
+                    <step codeblock="VARIABLE" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">check_status</codeblock>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+            <codeblock name="check_status">
+                <steps>
+                    <step codeblock="check_status" commented="true" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg" snip="message">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">checking status of [[#IN_PROGRESS.TASK_NAME]] ... [[#IN_PROGRESS.STATUS]]</message>
+                        </function>
+                    </step>
+                    <step codeblock="check_status" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="sleep" snip="seconds">
+                            <seconds input_type="text" label="Sleep">5</seconds>
+                        </function>
+                    </step>
+                    <step codeblock="check_status" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="if">
+                            <tests>
+                                <test>
+                                    <eval>"[[#IN_PROGRESS.STATUS]]" in ("Submitted", "Staged", "Processing", "Aborting", "Queued")</eval>
+                                    <action>
+                                        <function name="codeblock" snip="codeblock">
+                                            <codeblock input_type="text">check_status</codeblock>
+                                        </function>
+                                    </action>
+                                </test>
+                            </tests>
+                            <else input_type="text">
+                                <function name="add_summary_item" snip="name">
+                                    <name break_after="true" input_type="text" label="Item Name" style="display: block;">Task - [[#IN_PROGRESS.TASK_NAME]]</name>
+                                    <detail class="w95pct" input_type="textarea" label="Detail" rows="3" style="display: block;">[[#IN_PROGRESS.STATUS]]</detail>
+                                </function>
+                            </else>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+            <codeblock name="MAIN">
+                <steps>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="comment">
+                            <comment class="w95pct" input_type="textarea" label="Comment" rows="3" style="display: block;">This QA Task will test all commands via the Run Task command.  There are tasks representing 'most' of the available commands.  Some commands don't have a separate task, as they're included here in the master task.  (Run Task, If, Log Message, Codeblock, End, Comment, Add Summary Item, Set Logging Level)</comment>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="set_debug_level">
+                            <debug_level dataset="ddDataSource_GetDebugLevels" datasource="function" input_type="dropdown" label="Logging Level">20</debug_level>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg" snip="message">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">Starting QA test...</message>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">FLOW</codeblock>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">CONTROL</codeblock>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">INTERACT</codeblock>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="codeblock" snip="codeblock">
+                            <codeblock input_type="text">VARIABLE</codeblock>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="end" snip="status">
+                            <status dataset="Completed|Error|Cancelled" datasource="local" input_type="dropdown" label="Status">Completed</status>
+                            <message class="w95pct" input_type="textarea" label="Message" label_style="display: block;" rows="3">All done!</message>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+        </codeblocks>
+    </task>
+    <task code="QA - SQL Exec" concurrent_instances="" name="QA - SQL Exec" on_conflict="cancel" original_task_id="28d29768-b90a-4198-bc5c-2c5fefd875b2" queue_depth="" status="Development" version="1.000">
+        <description>Tests New Connection, SQL Exec, and Drop Connection.  Uses the explicit mode of New Connection by specifying a conn string.</description>
+        <codeblocks>
+            <codeblock name="MAIN">
+                <steps>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="new_connection" snip="conn_name">
+                            <conn_type input_type="select">mysql</conn_type>
+                            <cloud_name input_type="dropdown" style="combo" />
+                            <asset input_type="text">address=localhost userid=cato password=cato db_name=cato</asset>
+                            <conn_name class="w200px" help="Name this connection for reference in the Task." input_type="text" label="as" required="true">MYSQLCONN</conn_name>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="1" output_row_delimiter="0">
+                        <description />
+                        <function name="sql_exec" parse_method="1" snip="sql" variables="true">
+                            <conn_name connection_picker="true" input_type="text">MYSQLCONN</conn_name>
+                            <mode input_type="select">SQL</mode>
+                            <sql input_type="text">select * from messenger_settings;</sql>
+                            <handle input_type="text" />
+                            <pairs label="Bind Variables">
+                                <pair>
+                                    <key input_type="text" label="Bind" />
+                                    <value input_type="text" label="Value" />
+                                </pair>
+                            </pairs>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="drop_connection" snip="conn_name">
+                            <conn_name connection_picker="true" input_type="text" label="Connection">MYSQLCONN</conn_name>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+        </codeblocks>
+    </task>
+    <task code="QA - Wait" concurrent_instances="" name="QA - Wait For Tasks" on_conflict="cancel" original_task_id="0cf20a43-c16b-46d6-8bd2-e9104157e903" queue_depth="" status="Development" version="1.000">
+        <description>Starts a sleeper task, then waits for it to finish.  Then starts the sleeper task again and cancels it.</description>
+        <codeblocks>
+            <codeblock name="MAIN">
+                <steps>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg" snip="message">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">First, start it with a short timer, and wait.</message>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="run_task">
+                            <task_name input_type="text">QA - Sleep</task_name>
+                            <version input_type="text" />
+                            <time_to_wait input_type="text" />
+                            <on_success input_type="text" />
+                            <on_error input_type="text" />
+                            <asset_id input_type="text" />
+                            <handle input_type="text">WAIT4ME</handle>
+                            <parameters>
+                                <parameter id="p_7e597747-b0e9-11e2-8ee7-c8bcc89c1491" required="false">
+                                    <name>how_long</name>
+                                    <values present_as="value">
+                                        <value>15</value>
+                                    </values>
+                                </parameter>
+                            </parameters>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="wait_for_tasks">
+                            <handles label="Handles">
+                                <handle label="Handle">
+                                    <name input_type="text" label="Name">WAIT4ME</name>
+                                </handle>
+                            </handles>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg" snip="message">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">This time, start it with a long timer, then use the Instance property of the handle to get another handle, and cancel the task using that.</message>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="run_task">
+                            <task_name input_type="text">QA - Sleep</task_name>
+                            <version input_type="text" />
+                            <time_to_wait input_type="text" />
+                            <on_success input_type="text" />
+                            <on_error input_type="text" />
+                            <asset_id input_type="text" />
+                            <handle input_type="text">WAIT4ME</handle>
+                            <parameters></parameters>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="get_instance_handle" snip="handle">
+                            <instance input_type="text" label="Task Instance">[[#WAIT4ME.INSTANCE]]</instance>
+                            <handle input_type="text" label="Handle">NEWHANDLE</handle>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg" snip="message">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">Setting NEWHANDLE to Task Instance [[#WAIT4ME.INSTANCE]], then canceling...</message>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="cancel_task" snip="task_instance">
+                            <task_instance class="w95pct" input_type="text" label="Task Instance ID(s)">[[#NEWHANDLE.INSTANCE]]</task_instance>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+        </codeblocks>
+    </task>
+    <task code="QA - Loop" concurrent_instances="" name="QA - Loop Test" on_conflict="cancel" original_task_id="f791ccf7-c313-4534-b0e0-c18b9448af75" queue_depth="" status="Development" version="1.000">
+        <description>Tests the Loop command, the Break Loop command, Variable arrays, and the Variable array 'count' property.</description>
+        <codeblocks>
+            <codeblock name="MAIN">
+                <steps>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="set_variable">
+                            <variables>
+                                <variable>
+                                    <name input_type="text">a,1</name>
+                                    <value input_type="text">1</value>
+                                    <modifier input_type="select">DEFAULT</modifier>
+                                </variable>
+                                <variable>
+                                    <name input_type="text">a,2</name>
+                                    <value input_type="text">2</value>
+                                    <modifier input_type="select">DEFAULT</modifier>
+                                </variable>
+                                <variable>
+                                    <name input_type="text">a,3</name>
+                                    <value input_type="text">3</value>
+                                    <modifier input_type="select">DEFAULT</modifier>
+                                </variable>
+                            </variables>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">a1=[[a,1]]
+a2=[[a,2]]
+a3=[[a,3]]
+</message>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="loop">
+                            <start input_type="text">1</start>
+                            <counter input_type="text">x</counter>
+                            <test input_type="select">&lt;=</test>
+                            <compare_to input_type="text">[[a,*]]</compare_to>
+                            <increment input_type="text">1</increment>
+                            <action>
+                                <function name="log_msg">
+                                    <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">x=[[x]]
+a=[[a,[[x]]]]
+a=[[a,2]]</message>
+                                </function>
+                            </action>
+                            <max input_type="text" />
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="loop">
+                            <start input_type="text">1</start>
+                            <counter input_type="text">y</counter>
+                            <test input_type="select">&lt;=</test>
+                            <compare_to input_type="text">20</compare_to>
+                            <increment input_type="text">1</increment>
+                            <action>
+                                <function name="break_loop" />
+                            </action>
+                            <max input_type="text">20</max>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+        </codeblocks>
+    </task>
+    <task code="QA - HTTP" concurrent_instances="" name="QA - HTTP" on_conflict="cancel" original_task_id="af0ca0f9-6f10-4117-8a1f-3aa05eba4fe9" queue_depth="" status="Development" version="1.000">
+        <description>Tests HTTP GET and POST requests.</description>
+        <codeblocks>
+            <codeblock name="MAIN">
+                <steps>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="2" output_row_delimiter="0">
+                        <description />
+                        <function col_delimiter="0" name="http" parse_method="2" row_delimiter="0" variables="true">
+                            <type dataset="GET|POST" datasource="local" input_type="dropdown" label="Request Type">POST</type>
+                            <url class="w95pct" input_type="textarea" label="URL" label_style="display: block;" required="true" rows="1">http://httpbin.org/post</url>
+                            <pairs is_array="true" label="Parameters">
+                                <pair label="Parameter">
+                                    <key input_type="text" label="Name">zzz</key>
+                                    <value class="w50pct" input_type="text" label="Value">123</value>
+                                    <mask input_type="checkbox" label="Mask?" />
+                                </pair>
+                                <pair label="Parameter">
+                                    <key input_type="text" label="Name">yyy</key>
+                                    <value class="w50pct" input_type="text" label="Value">234</value>
+                                    <mask input_type="checkbox" label="Mask?" />
+                                </pair>
+                            </pairs>
+                            <step_variables>
+                                <variable>
+                                    <name>X</name>
+                                    <type>range</type>
+                                    <prefix>Tuscarora Mill strives to</prefix>
+                                    <suffix>with every glass</suffix>
+                                </variable>
+                            </step_variables>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">hello [[_HTTP_RESPONSE]] [[x]]</message>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="2" output_row_delimiter="0">
+                        <description />
+                        <function name="http" parse_method="2" snip="url" variables="true">
+                            <type dataset="GET|POST" datasource="local" input_type="dropdown" label="Request Type">GET</type>
+                            <url class="w95pct" input_type="textarea" label="URL" label_style="display: block;" required="true" rows="1">http://httpbin.org/get</url>
+                            <pairs is_array="true" label="Parameters">
+                                <pair label="Parameter">
+                                    <key input_type="text" label="Name" />
+                                    <value class="w50pct" input_type="text" label="Value" />
+                                    <mask input_type="checkbox" label="Mask?" />
+                                </pair>
+                            </pairs>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+        </codeblocks>
+    </task>
+    <task code="QA - Datastore" concurrent_instances="" name="QA - Datastore" on_conflict="cancel" original_task_id="31a278b2-0c49-4e7a-9ba5-d5bebaa94f30" queue_depth="" status="Development" version="1.000">
+        <description>Tests the Datastore commands.</description>
+        <codeblocks>
+            <codeblock name="MAIN">
+                <steps>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="datastore_drop_collection">
+                            <collection input_type="text" label="Collection">qa_tmp</collection>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="datastore_create_collection">
+                            <collection input_type="text" label="Collection">qa_tmp</collection>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="datastore_insert">
+                            <collection input_type="text" label="Collection">qa_tmp</collection>
+                            <object_id input_type="text" label="ObjectId Variable">objid</object_id>
+                            <pairs is_array="true">
+                                <pair>
+                                    <name input_type="text" label="Name">foo</name>
+                                    <value input_type="text" label="Value" style="width: 50%;">bar</value>
+                                </pair>
+                            </pairs>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="datastore_create_index">
+                            <collection input_type="text" label="Collection">qa_tmp</collection>
+                            <unique dataset="no|yes" datasource="local" input_type="dropdown" label="Unique?">yes</unique>
+                            <columns is_array="true">
+                                <column>
+                                    <name input_type="text" label="Name">foo</name>
+                                </column>
+                            </columns>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="datastore_query">
+                            <collection input_type="text" label="Collection">qa_tmp</collection>
+                            <query class="w90pct" input_type="textarea" label="Query" label_style="display: block;" rows="1">{ "_id" : "[[objid]]" }</query>
+                            <columns is_array="true">
+                                <column>
+                                    <name input_type="text" label="Column Name">foo</name>
+                                    <variable input_type="text" label="Variable Name">foo_is</variable>
+                                </column>
+                            </columns>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg" snip="message">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">the "foo" property is: [[foo_is]]</message>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="datastore_update">
+                            <collection input_type="text" label="Collection" required="true">qa_tmp</collection>
+                            <upsert input_type="checkbox" label="Upsert?" />
+                            <query class="w90pct" input_type="textarea" label="Query" label_style="display: block;" rows="1">{ "_id" : "[[objid]]" }</query>
+                            <columns is_array="true">
+                                <column>
+                                    <name input_type="text" label="Name">hort</name>
+                                    <value input_type="text" label="Value" style="width: 50%;">orama</value>
+                                </column>
+                                <column>
+                                    <name input_type="text" label="Name">foo</name>
+                                    <value input_type="text" label="Value" style="width: 50%;">baz</value>
+                                </column>
+                            </columns>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="datastore_delete">
+                            <collection input_type="text" label="Collection">qa_tmp</collection>
+                            <query class="w90pct" input_type="textarea" label="Query" label_style="display: block;" rows="1">{ "foo" : "baz" }</query>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="datastore_drop_collection">
+                            <collection input_type="text" label="Collection">qa_tmp</collection>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+        </codeblocks>
+    </task>
+    <task code="QA - Subtask A" concurrent_instances="" name="QA - Subtask A" on_conflict="cancel" original_task_id="38a1322d-aad4-4821-b46b-bcc3239f3faa" queue_depth="" status="Development" version="1.000">
+        <description>Calls a Subtask.</description>
+        <codeblocks>
+            <codeblock name="MAIN">
+                <steps>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="subtask">
+                            <original_task_id input_type="text">9c6eb168-a265-4065-9f30-41058adeb22c</original_task_id>
+                            <version input_type="text" />
+                            <task_name>QA - Subtask B</task_name>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+        </codeblocks>
+    </task>
+    <task code="QA - While" concurrent_instances="" name="QA - While" on_conflict="cancel" original_task_id="af2baf01-6d51-44eb-ba5a-fd1047e171a5" queue_depth="" status="Development" version="1.000">
+        <description>Tests the While command, and the Set Variable command with incrementation.</description>
+        <codeblocks>
+            <codeblock name="MAIN">
+                <steps>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="set_variable">
+                            <variables label="Variables">
+                                <variable label="Variable">
+                                    <name input_type="text" label="Name">x</name>
+                                    <value input_type="text" label="Value">1</value>
+                                    <modifier input_type="select" label="Modifier">DEFAULT</modifier>
+                                </variable>
+                            </variables>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg" snip="message">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">Starting with x=[[x]]</message>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="while" snip="test">
+                            <test input_type="text">[[x]] &lt; 5</test>
+                            <action>
+                                <function name="set_variable">
+                                    <variables label="Variables">
+                                        <variable label="Variable">
+                                            <name input_type="text" label="Name">x</name>
+                                            <value input_type="text" label="Value">[[x]]+1</value>
+                                            <modifier input_type="select" label="Modifier">Math</modifier>
+                                        </variable>
+                                    </variables>
+                                </function>
+                            </action>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg" snip="message">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">Ending with x=[[x]]</message>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+        </codeblocks>
+    </task>
+    <task code="QA - Sleep" concurrent_instances="" name="QA - Sleep" on_conflict="cancel" original_task_id="77f0e977-88f0-4fdb-af97-0d735d452d2a" queue_depth="" status="Development" version="1.000">
+        <description>This task Sleeps for a while, giving other Tasks the chance to wait for it, etc.</description>
+        <parameters>
+            <parameter constraint="" constraint_msg="" encrypt="false" id="p_7e597747-b0e9-11e2-8ee7-c8bcc89c1491" maxlength="" maxvalue="" minlength="" minvalue="" prompt="true" required="false">
+                <name>how_long</name>
+                <desc />
+                <values present_as="value">
+                    <value id="pv_910f159c-b0e9-11e2-9146-c8bcc89c1491">60</value>
+                </values>
+            </parameter>
+        </parameters>
+        <codeblocks>
+            <codeblock name="MAIN">
+                <steps>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg" snip="message">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">Sleeping for [[how_long]] seconds...</message>
+                        </function>
+                    </step>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="sleep" snip="seconds">
+                            <seconds input_type="text" label="Sleep">[[how_long]]</seconds>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+        </codeblocks>
+    </task>
+    <task code="QA - Subtask B" concurrent_instances="" name="QA - Subtask B" on_conflict="cancel" original_task_id="1a899986-697b-4ba6-8256-4ad637128115" queue_depth="" status="Development" version="1.000">
+        <description>Target of a Subtask command - writes a log message.</description>
+        <parameters>
+            <parameter constraint="" constraint_msg="" encrypt="false" id="p_d436e2c2-37de-11e2-aa07-c8bcc89d4845" maxlength="" maxvalue="" minlength="" minvalue="" prompt="true" required="false">
+                <name>x</name>
+                <desc />
+                <values present_as="value">
+                    <value id="pv_d4378f38-37de-11e2-afc6-c8bcc89d4845">1</value>
+                </values>
+            </parameter>
+        </parameters>
+        <codeblocks>
+            <codeblock name="MAIN">
+                <steps>
+                    <step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+                        <description />
+                        <function name="log_msg" snip="message">
+                            <message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">Subtask can access the variables of it's parent task.  For example: [[_TASK_NAME]] is the Task that called me, not my name!</message>
+                        </function>
+                    </step>
+                </steps>
+            </codeblock>
+        </codeblocks>
+    </task>
+</tasks>
