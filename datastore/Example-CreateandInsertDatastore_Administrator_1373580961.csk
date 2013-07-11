@@ -1,0 +1,57 @@
+<tasks><task code="ex-013" concurrent_instances="" name="Example - Create and Insert Datastore" original_task_id="addb84a1-5c4c-42f9-b9c8-9ddde6781149" queue_depth="" status="Development" version="1.000"><description>An example of using the Cato internal datastore which is Mongodb backed. This task will create a collection, insert into the collection and drop the collection. </description><codeblocks><codeblock name="MAIN"><steps><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Create some data, representing a list of servers, csv format</description><function name="set_variable">
+					<variables label="Variables">
+						<variable label="Variable">
+							<name input_type="text" label="Name">serverlist</name>
+							<value input_type="text" label="Value">server1, 10.0.0.2
+server2, 10.0.0.3
+server3, 10.0.0.4
+server4, 10.0.0.5
+server5, 10.0.0.6
+server6, 10.0.0.7
+server7, 10.0.0.8
+server8, 10.0.0.9
+server9, 10.0.0.10
+server10, 10.0.0.11</value>
+							<modifier input_type="select" label="Modifier">DEFAULT</modifier>
+						</variable>
+					</variables>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="44" output_parse_type="2" output_row_delimiter="10"><description>Parse csv data into variable arrays</description><function col_delimiter="44" name="parse_text" parse_method="2" row_delimiter="10" snip="text" variables="true">
+					<text class="w95pct" input_type="textarea" label="Text" label_style="display: block;" required="true" rows="3">[[serverlist]]</text>
+				<step_variables><variable><name>server</name><type>delimited</type><position>1</position></variable><variable><name>address</name><type>delimited</type><position>2</position></variable></step_variables></function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Create a servers collection, sort of like a table. See mongodb docs</description><function name="datastore_create_collection">
+                    <collection input_type="text" label="Collection">servers</collection>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Create a unique index</description><function name="datastore_create_index">
+                    <collection input_type="text" label="Collection">servers</collection>
+                    <unique dataset="no|yes" datasource="local" input_type="dropdown" label="Unique?">yes</unique>
+					<columns is_array="true">
+						<column>
+							<name input_type="text" label="Name">servername</name>
+						</column>
+					</columns>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Loop through simulated server list, insert into servers collection</description><function name="loop">
+					<start input_type="text">1</start>
+					<counter input_type="text">ii</counter>
+					<test input_type="select">&lt;=</test>
+					<compare_to input_type="text">[[server,*]]</compare_to>
+					<increment input_type="text">1</increment>
+					<action><function name="datastore_insert">
+                    <collection input_type="text" label="Collection">servers</collection>
+					<pairs is_array="true">
+						<pair>
+							<name input_type="text" label="Name">servername</name>
+							<value input_type="text" label="Value">[[server,[[ii]]]]</value>
+						</pair>
+					<pair>
+							<name input_type="text" label="Name">ipaddress</name>
+							<value input_type="text" label="Value">[[address,[[ii]]]]</value>
+						</pair><pair>
+							<name input_type="text" label="Name">inuse</name>
+							<value input_type="text" label="Value">false</value>
+						</pair></pairs>
+				</function></action>
+					<max input_type="text" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Call subtask that will pull out the data and do things with it</description><function name="subtask">
+					<task_name input_type="text">Example - Query Datastore</task_name>
+					<version input_type="text" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Drops the servers collection</description><function name="datastore_drop_collection">
+                    <collection input_type="text" label="Collection">servers</collection>
+				</function></step></steps></codeblock></codeblocks></task></tasks>
