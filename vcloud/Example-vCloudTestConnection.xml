@@ -1,1 +1,48 @@
-Unable to find Task for [vCloud Test Connection / None]
+<tasks><task code="ex-016" concurrent_instances="" name="Example - vCloud Test Connection" original_task_id="014e9b56-65cc-42a5-9e04-ad0ef2218232" queue_depth="" status="Development" version="1.000"><description>Tests the connection to the vCloud endpoint and lists available vCloud datacenters</description><codeblocks><codeblock name="MAIN"><steps><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Retrieves the organization href value</description><function extension="vcloud.vcloud" name="vcloud_call_parse">
+					<endpoint_name class="combo w300px" dataset="ddDataSource_GetAllClouds" datasource="function" hr_after="true" input_type="dropdown" label="Cloud Endpoint Name" />
+					<path class="w90pct" input_type="textarea" label="Url or Method" label_style="display: block;" rows="1">org</path>
+                    <method_or_href dataset="method|href" datasource="local" input_type="dropdown" label="Method or Href">method</method_or_href>
+                    <action dataset="GET|POST|DELETE|PUT" datasource="local" input_type="dropdown" label="Action">GET</action>
+					<data class="w90pct" input_type="textarea" label="Data" label_style="display: block;" rows="3" />
+					<content_type class="w90pct" input_type="text" label="Content Type" />
+					<xpath class="w90pct" input_type="textarea" label="Xpath" label_style="display: block;" rows="1">Org</xpath>
+                    <values is_array="true" label="Values to Extract">
+                        <value label="Value">
+                            <name input_type="text" label="Attribute or Element Name">href</name>
+                            <variable input_type="text" label="Variable">org_href</variable>
+                            <type dataset="attribute|element" datasource="local" input_type="dropdown" label="Type">attribute</type>
+                        </value>
+                    </values>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Print the organization href</description><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">The organization href is -&gt; [[org_href]]</message>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Retrieve a list of available datacenters and their corresponding href urls</description><function extension="vcloud.vcloud" name="vcloud_call_parse">
+					<endpoint_name class="combo w300px" dataset="ddDataSource_GetAllClouds" datasource="function" hr_after="true" input_type="dropdown" label="Cloud Endpoint Name" />
+					<path class="w90pct" input_type="textarea" label="Url or Method" label_style="display: block;" rows="1">[[org_href]]</path>
+                    <method_or_href dataset="method|href" datasource="local" input_type="dropdown" label="Method or Href">href</method_or_href>
+                    <action dataset="GET|POST|DELETE|PUT" datasource="local" input_type="dropdown" label="Action">GET</action>
+					<data class="w90pct" input_type="textarea" label="Data" label_style="display: block;" rows="3" />
+					<content_type class="w90pct" input_type="text" label="Content Type" />
+					<xpath class="w90pct" input_type="textarea" label="Xpath" label_style="display: block;" rows="1">Link/[@type="application/vnd.vmware.vcloud.vdc+xml"]</xpath>
+                    <values is_array="true" label="Values to Extract">
+                        <value label="Value">
+                            <name input_type="text" label="Attribute or Element Name">name</name>
+                            <variable input_type="text" label="Variable">vdc</variable>
+                            <type dataset="attribute|element" datasource="local" input_type="dropdown" label="Type">attribute</type>
+                        </value>
+                    <value label="Value">
+                            <name input_type="text" label="Attribute or Element Name">href</name>
+                            <variable input_type="text" label="Variable">vdc_href</variable>
+                            <type dataset="attribute|element" datasource="local" input_type="dropdown" label="Type">attribute</type>
+                        </value></values>
+					<output_var input_type="text" label="Output Variable" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Print out all virtual datacenters and their href values</description><function name="loop">
+					<start input_type="text">1</start>
+					<counter input_type="text">ii</counter>
+					<test input_type="select">&lt;=</test>
+					<compare_to input_type="text">[[vdc,*]]</compare_to>
+					<increment input_type="text">1</increment>
+					<action><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">Virtual Datacenter Name: [[vdc,[[ii]]]] and it's href url: [[vdc_href,[[ii]]]]</message>
+				</function></action>
+					<max input_type="text" />
+				</function></step></steps></codeblock></codeblocks></task></tasks>
