@@ -1,0 +1,126 @@
+<tasks><task code="ex-020" concurrent_instances="" name="Boot Ec2 and Install Tomcat" original_task_id="fda1b199-820c-11e3-a179-c8bcc89d4845" queue_depth="" status="Development" version="1.000"><description>This task will boot an ec2 server, ssh to the server, install Tomcat, perform a smoke test and terminate the ec2 server</description><parameters><parameter constraint="" constraint_msg="" encrypt="false" id="p_2f44dc35-820d-11e3-acc8-c8bcc89d4845" maxlength="" maxvalue="" minlength="" minvalue="" prompt="true" required="true"><name>image</name><desc>Image id</desc><values present_as="value"><value id="pv_a475c285-820d-11e3-9872-c8bcc89d4845" /></values></parameter><parameter constraint="" constraint_msg="" encrypt="false" id="p_3df8ac3a-820d-11e3-b963-c8bcc89d4845" maxlength="" maxvalue="" minlength="" minvalue="" prompt="true" required="true"><name>key</name><desc>Key pair name for ssh</desc><values present_as="value"><value id="pv_a7f3d075-820d-11e3-afda-c8bcc89d4845" /></values></parameter><parameter constraint="" constraint_msg="" encrypt="false" id="p_45b3d56b-820d-11e3-8d54-c8bcc89d4845" maxlength="" maxvalue="" minlength="" minvalue="" prompt="true" required="true"><name>type</name><desc>Instance type</desc><values present_as="value"><value id="pv_0d2a50bd-820e-11e3-8da1-c8bcc89d4845" /></values></parameter><parameter constraint="" constraint_msg="" encrypt="false" id="p_5391b026-820d-11e3-b0ce-c8bcc89d4845" maxlength="" maxvalue="" minlength="" minvalue="" prompt="true" required="true"><name>sg</name><desc>Security group name (port 22 and 8080 open)</desc><values present_as="value"><value id="pv_6ba065f3-8211-11e3-a604-c8bcc89d4845" /></values></parameter><parameter constraint="" constraint_msg="" encrypt="false" id="p_63135d6b-820d-11e3-895c-c8bcc89d4845" maxlength="" maxvalue="" minlength="" minvalue="" prompt="true" required="true"><name>sshuser</name><desc>Ssh user</desc><values present_as="value"><value id="pv_b288ba7d-820d-11e3-93ae-c8bcc89d4845" /></values></parameter></parameters><codeblocks><codeblock name="MAIN"><steps><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>create the ec2 instance</description><function name="aws_ec2_RunInstances">
+						<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" input_type="dropdown" label="AWS Region" />
+						<result_name hr_after="true" input_type="text" label="Result Variable">result</result_name>
+						<ImageId input_type="text">[[image]]</ImageId>
+						<MinCount input_type="text">1</MinCount>
+						<MaxCount input_type="text">1</MaxCount>
+						<KeyName break_before="true" input_type="text">[[key]]</KeyName>
+						<InstanceType input_type="text">[[type]]</InstanceType>
+						<UserData break_after="true" break_before="true" input_type="textarea" rows="2" style="width: 95%" />
+						<SecurityGroupId.n is_array="true" option_tab="Options">
+							<SecurityGroupId input_type="text" />
+						</SecurityGroupId.n>
+						<SecurityGroup.n is_array="true">
+							<SecurityGroup input_type="text">[[sg]]</SecurityGroup>
+						</SecurityGroup.n>
+						<Placement option_tab="Options">
+							<AvailabilityZone input_type="text" />
+							<GroupName input_type="text" />
+							<Tenancy input_type="text" />
+						</Placement>
+						<KernelId input_type="text" option_tab="Options" />
+						<RamdiskId input_type="text" option_tab="Options" />
+						<BlockDeviceMapping.n is_array="true" option_tab="Options">
+							<BlockDeviceMapping>
+								<DeviceName input_type="text" />
+								<NoDevice input_type="text" />
+								<VirtualName input_type="text" />
+								<Ebs>
+									<SnapshotId input_type="text" />
+									<VolumeSize input_type="text" />
+									<DeleteOnTermination input_type="text" />
+								</Ebs>
+							</BlockDeviceMapping>
+						</BlockDeviceMapping.n>
+						<Monitoring option_tab="Options">
+							<Enabled input_type="text" />
+						</Monitoring>
+						<SubnetId input_type="text" option_tab="Options" />
+						<DisableApiTermination input_type="text" option_tab="Options" />
+						<InstanceInitiatedShutdownBehavior input_type="text" option_tab="Options" />
+						<PrivateIpAddress input_type="text" option_tab="Options" />
+						<ClientToken input_type="text" option_tab="Options" />
+						<AddressingType input_type="text" option_tab="Options" />
+					</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>extract the instance id from the result xml</description><function name="set_variable">
+                            <variables label="Variables">
+                                <variable label="Variable">
+                                    <name input_type="text" label="Name">instance</name>
+                                    <value input_type="text" label="Value">[[result.//instanceId]]</value>
+                                    <modifier input_type="select" label="Modifier">DEFAULT</modifier>
+                                </variable>
+                            </variables>
+                        </function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>establish an ssh connection</description><function name="new_connection" snip="conn_name">
+					<conn_type input_type="select">ssh - ec2</conn_type>
+					<cloud_name input_type="dropdown" style="combo" />
+					<asset input_type="text">[[sshuser]]@[[instance]]</asset>
+					<conn_name class="w200px" help="Name this connection for reference in the Task." input_type="text" label="Connection Name" required="true">CONN1</conn_name>
+					<debug break_after="true" input_type="checkbox" label="Debug" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="2" output_row_delimiter="0"><description>install JRE and tomcat on Ubuntu</description><function name="cmd_line" parse_method="2" snip="command" variables="true">
+					<conn_name break_after="true" connection_picker="true" input_type="text" label="Connection" required="true">CONN1</conn_name>
+					<command class="w95pct" input_type="textarea" label="Command" label_style="display: block;" required="true" rows="3">/bin/bash &lt;&lt;EOF
+sleep 10
+sudo apt-get update
+sudo apt-get install -y openjdk-7-jre tomcat7
+EOF</command>
+					<timeout break_after="true" input_type="text" label="Timeout" option_tab="Options">240</timeout>
+					<positive_response break_after="true" input_type="text" label="Positive Response" option_tab="Options" />
+					<negative_response break_after="true" input_type="text" label="Negative Response" option_tab="Options" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Drop ssh connection</description><function name="drop_connection" snip="conn_name">
+					<conn_name connection_picker="true" input_type="text" label="Connection">CONN1</conn_name>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Get the public ip address</description><function name="aws_ec2_DescribeInstances">
+						<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region" />
+						<InstanceId.n is_array="true">
+							<InstanceId input_type="text">[[instance]]</InstanceId>
+						</InstanceId.n>
+						<Filter.n is_array="true">
+							<Filter>
+								<Name input_type="text" />
+								<Value.m is_array="true">
+									<Value input_type="text" />
+								</Value.m>
+							</Filter>
+						</Filter.n>
+						<result_name break_before="true" input_type="text" label="Result Variable">result</result_name>
+					</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Extract public ip from result xml</description><function name="set_variable">
+					<variables label="Variables">
+						<variable label="Variable">
+							<name input_type="text" label="Name">address</name>
+							<value input_type="text" label="Value">[[result.//ipAddress]]</value>
+							<modifier input_type="select" label="Modifier">DEFAULT</modifier>
+						</variable>
+					</variables>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="2" output_row_delimiter="0"><description>Http to Tomcat server, smoke test</description><function col_delimiter="0" name="http" parse_method="2" row_delimiter="0" snip="url" variables="true">
+					<type dataset="GET|POST|DELETE|PUT|HEADER" datasource="local" input_type="dropdown" label="Request Type">GET</type>
+					<url class="w95pct" input_type="textarea" label="URL" label_style="display: block;" required="true" rows="1">http://[[address]]:8080</url>
+					<data class="w95pct" input_type="textarea" label="Data" label_style="display: block;" rows="3" />
+					<headers is_array="true" label="Header Fields">
+						<pair label="Key and Values">
+							<key input_type="text" label="Name" />
+							<value class="w50pct" input_type="text" label="Value" />
+						</pair>
+					</headers>
+					<timeout break_after="true" input_type="text" label="Timeout" option_tab="Options">10</timeout>
+					<retries break_after="true" input_type="text" label="Retries" option_tab="Options">1</retries>
+					<status_code break_after="true" input_type="text" label="Status Code Variable" option_tab="Options" />
+					<status_msg break_after="true" input_type="text" label="Status Message Variable" option_tab="Options" />
+					<response_header break_after="true" input_type="text" label="Response Header Variable" option_tab="Options" />
+					<response_body break_after="true" input_type="text" label="Response Body Variable " option_tab="Options" />
+					<response_time_ms break_after="true" input_type="text" label="Response Time ms Variable" option_tab="Options" />
+				<step_variables><variable><name>smoke_result</name><type>regex</type><regex>It works</regex></variable></step_variables></function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Evaluate smoke test result</description><function name="if">
+					<tests>
+						<test>
+							<eval>"[[smoke_result]]" == "It works"</eval>
+							<action><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">SUCCESS!!!</message>
+				</function></action>
+						</test>
+					</tests>
+				<else input_type="text"><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">FAILURE!!!</message>
+				</function></else></function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Terminate the ec2 instance</description><function name="aws_ec2_TerminateInstances">
+						<aws_region class="combo w300px" dataset="ddDataSource_GetAWSClouds" datasource="function" hr_after="true" input_type="dropdown" label="AWS Region" />
+						<InstanceId.n is_array="true">
+							<InstanceId input_type="text">[[instance]]</InstanceId>
+						</InstanceId.n>
+						<result_name break_before="true" input_type="text" label="Result Variable" />
+					</function></step></steps></codeblock></codeblocks></task></tasks>
