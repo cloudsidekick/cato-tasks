@@ -1,0 +1,172 @@
+<tasks><task code="ex-23" concurrent_instances="None" name="Digital Ocean Sample Task" original_task_id="7859d123-bff7-11e3-b8bc-c8bcc89d4845" queue_depth="None" status="Development" version="1.000"><description>This task demonstrates some of the commands used for interacting with Digital Ocean. It will prompt for an ssh keyname, retrieve the ID for that key and create a new droplet, manage it and destroy it.</description><parameters><parameter constraint="" constraint_msg="" encrypt="false" id="p_71bb3fbd-c1b2-11e3-b701-c8bcc89d4845" maxlength="" maxvalue="" minlength="" minvalue="" prompt="true" required="true"><name>sshkeyname</name><desc>Ssh key name as defined in Digital Ocean</desc><values present_as="value"><value id="pv_71bc5ac0-c1b2-11e3-b6d0-c8bcc89d4845" /></values></parameter></parameters><codeblocks><codeblock name="MAIN"><steps><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Retrieve ssh key id using name</description><function extension="digocn_ext.digocncmds" name="digocn_show_ssh_keys">
+                    <key_id input_type="text" label="Ssh Key Id (filter)" />
+                    <name break_after="true" input_type="text" label="Key Name (filter)">[[sshkeyname]]</name>
+                    <id_out input_type="text" label="Ssh Key Id (out)">keyid</id_out>
+                    <name_out input_type="text" label="Ssh Key Name (out)" />
+                    <status input_type="text" label="Request Status (out)" />
+                    <message input_type="text" label="Message (out)" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Test that key name was found</description><function name="if">
+					<tests>
+						<test>
+							<eval>"[[keyid]]" == ""</eval>
+							<action><function name="end" snip="status">
+					<status dataset="Completed|Error|Cancelled" datasource="local" input_type="dropdown" label="Status">Error</status>
+					<message class="w95pct" input_type="textarea" label="Message" label_style="display: block;" rows="3">The ssh key name [[sshkeyname]] was not found in Digital Ocean. Try again with a different keyname.</message>
+				</function></action>
+						</test>
+					</tests>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Create New Droplet</description><function extension="digocn_ext.digocncmds" name="digocn_new_droplet">
+                    <name break_after="true" input_type="text" label="Name">test1</name>
+                    <size_id input_type="text" label="Size Id" />
+                    <size_slug break_after="true" input_type="text" label="Size Slug">512MB</size_slug>
+                    <image_id input_type="text" label="Image Id">3101918</image_id>
+                    <image_slug break_after="true" input_type="text" label="Image Slug" />
+                    <region_id input_type="text" label="Region Id" />
+                    <region_slug break_after="true" input_type="text" label="Region Slug">nyc2</region_slug>
+                    <ssh_key_ids break_after="true" input_type="text" label="Ssh Key Ids">[[keyid]]</ssh_key_ids>
+                    <private_networking input_type="checkbox" label="Private Networking?" />
+                    <backups_enabled break_after="true" input_type="checkbox" label="Backups Enabled?" />
+                    <wait input_type="checkbox" label="Wait Until Done?">1</wait>
+                    <timeout break_after="true" input_type="text" label="Timeout Waiting Until Done" />
+                    <status input_type="text" label="Request Status (out)">r</status>
+                    <message break_after="true" input_type="text" label="Message (out)">m</message>
+                    <droplet_id input_type="text" label="Droplet Id (out)">id</droplet_id>
+                    <ip_address input_type="text" label="Ip Address (out, if wait)">ip</ip_address>
+                    <event_id input_type="text" label="Event Id (out)">e</event_id>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Create ssh connection</description><function name="new_connection" snip="conn_name">
+					<conn_type input_type="select">ssh</conn_type>
+					<cloud_name input_type="dropdown" style="combo" />
+					<asset input_type="text">address=[[ip]] user=root shared_cred=csk-demo</asset>
+					<conn_name class="w200px" help="Name this connection for reference in the Task." input_type="text" label="Connection Name" required="true">CONN1</conn_name>
+					<debug break_after="true" input_type="checkbox" label="Debug" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="2" output_row_delimiter="0"><description>perform some command</description><function name="cmd_line" parse_method="2" snip="command" variables="true">
+					<conn_name break_after="true" connection_picker="true" input_type="text" label="Connection" required="true">CONN1</conn_name>
+					<command class="w95pct" input_type="textarea" label="Command" label_style="display: block;" required="true" rows="3">df -h</command>
+					<timeout break_after="true" input_type="text" label="Timeout" option_tab="Options" />
+					<positive_response break_after="true" input_type="text" label="Positive Response" option_tab="Options" />
+					<negative_response break_after="true" input_type="text" label="Negative Response" option_tab="Options" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="10" output_parse_type="2" output_row_delimiter="10"><description>Perform another command, list all files or directories in /</description><function col_delimiter="10" name="cmd_line" parse_method="2" row_delimiter="10" snip="command" variables="true">
+					<conn_name break_after="true" connection_picker="true" input_type="text" label="Connection" required="true">CONN1</conn_name>
+					<command class="w95pct" input_type="textarea" label="Command" label_style="display: block;" required="true" rows="3">ls -1 /</command>
+					<timeout break_after="true" input_type="text" label="Timeout" option_tab="Options" />
+					<positive_response break_after="true" input_type="text" label="Positive Response" option_tab="Options" />
+					<negative_response break_after="true" input_type="text" label="Negative Response" option_tab="Options" />
+				<step_variables><variable><name>dir</name><type>delimited</type><position>1</position></variable></step_variables></function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Print a list of files or directories found in the previous command</description><function name="loop">
+					<start input_type="text">1</start>
+					<counter input_type="text">z</counter>
+					<test input_type="select">&lt;=</test>
+					<compare_to input_type="text">[[dir,*]]</compare_to>
+					<increment input_type="text">1</increment>
+					<action><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">file or directory [[z]] is [[dir,[[z]]]]</message>
+				</function></action>
+					<max input_type="text" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Close the ssh connection</description><function name="drop_connection" snip="conn_name">
+					<conn_name connection_picker="true" input_type="text" label="Connection">CONN1</conn_name>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Get a list of active droplets</description><function extension="digocn_ext.digocncmds" name="digocn_show_droplet">
+                    <id break_after="true" input_type="text" label="Droplet Id" />
+                    <status input_type="text" label="Request Status (out)">s</status>
+                    <message break_after="true" input_type="text" label="Message (out)">m</message>
+                    <droplet_id input_type="text" label="Droplet Id (out)">d_id</droplet_id>
+                    <name input_type="text" label="Name (out)">name</name>
+                    <image_id input_type="text" label="Image Id (out)">image</image_id>
+                    <region_id break_after="true" input_type="text" label="Region Id (out)">region</region_id>
+                    <size_id input_type="text" label="Size Id (out)">size</size_id>
+                    <ip_address break_after="true" input_type="text" label="Ip Address (out)">ip</ip_address>
+                    <private_ip_address input_type="text" label="Private Ip Address (out)">p_ip</private_ip_address>
+                    <backups_active break_after="true" input_type="text" label="Backups Active (out)">back</backups_active>
+                    <locked break_after="true" input_type="text" label="Locked (out)">locked</locked>
+                    <d_status input_type="text" label="Droplet Status (out)">status</d_status>
+                    <created_at input_type="text" label="Created At (out)">created</created_at>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Print the list of active droplets</description><function name="loop">
+					<start input_type="text">1</start>
+					<counter input_type="text">z</counter>
+					<test input_type="select">&lt;=</test>
+					<compare_to input_type="text">[[d_id,*]]</compare_to>
+					<increment input_type="text">1</increment>
+					<action><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">[[d_id,[[z]]]], [[name,[[z]]]], [[image,[[z]]]], [[region,[[z]]]], [[size,[[z]]]], [[ip,[[z]]]], [[p_ip,[[z]]]], [[back,[[z]]]], [[locked,[[z]]]], [[status,[[z]]]], [[created,[[z]]]]</message>
+				</function></action>
+					<max input_type="text" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Power off this droplet</description><function extension="digocn_ext.digocncmds" name="digocn_poweroff_droplet">
+                    <id break_after="true" input_type="text" label="Droplet Id">[[id]]</id>
+                    <wait input_type="checkbox" label="Wait Until Done?">1</wait>
+                    <timeout break_after="true" input_type="text" label="Timeout Waiting Until Done" />
+                    <status input_type="text" label="Request Status (out)" />
+                    <message break_after="true" input_type="text" label="Message (out)" />
+                    <event_id input_type="text" label="Event Id (out)" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Power back on this droplet</description><function extension="digocn_ext.digocncmds" name="digocn_poweron_droplet">
+                    <id break_after="true" input_type="text" label="Droplet Id">[[id]]</id>
+                    <wait input_type="checkbox" label="Wait Until Done?">1</wait>
+                    <timeout break_after="true" input_type="text" label="Timeout Waiting Until Done" />
+                    <status input_type="text" label="Request Status (out)" />
+                    <message break_after="true" input_type="text" label="Message (out)" />
+                    <event_id input_type="text" label="Event Id (out)" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Shut down this droplet</description><function extension="digocn_ext.digocncmds" name="digocn_shutdown_droplet">
+                    <id break_after="true" input_type="text" label="Droplet Id">[[id]]</id>
+                    <wait input_type="checkbox" label="Wait Until Done?">1</wait>
+                    <timeout break_after="true" input_type="text" label="Timeout Waiting Until Done" />
+                    <status input_type="text" label="Request Status (out)" />
+                    <message break_after="true" input_type="text" label="Message (out)" />
+                    <event_id input_type="text" label="Event Id (out)" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Reboot this droplet</description><function extension="digocn_ext.digocncmds" name="digocn_reboot_droplet">
+                    <id break_after="true" input_type="text" label="Droplet Id">[[id]]</id>
+                    <wait input_type="checkbox" label="Wait Until Done?">1</wait>
+                    <timeout break_after="true" input_type="text" label="Timeout Waiting Until Done" />
+                    <status input_type="text" label="Request Status (out)" />
+                    <message break_after="true" input_type="text" label="Message (out)" />
+                    <event_id input_type="text" label="Event Id (out)" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Power this droplet on</description><function extension="digocn_ext.digocncmds" name="digocn_cycle_droplet">
+                    <id break_after="true" input_type="text" label="Droplet Id">[[id]]</id>
+                    <wait input_type="checkbox" label="Wait Until Done?">1</wait>
+                    <timeout break_after="true" input_type="text" label="Timeout Waiting Until Done" />
+                    <status input_type="text" label="Request Status (out)" />
+                    <message break_after="true" input_type="text" label="Message (out)" />
+                    <event_id input_type="text" label="Event Id (out)" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Reset root password for this droplet</description><function extension="digocn_ext.digocncmds" name="digocn_resetroot_droplet">
+                    <id break_after="true" input_type="text" label="Droplet Id">[[id]]</id>
+                    <wait input_type="checkbox" label="Wait Until Done?">1</wait>
+                    <timeout break_after="true" input_type="text" label="Timeout Waiting Until Done" />
+                    <status input_type="text" label="Request Status (out)" />
+                    <message break_after="true" input_type="text" label="Message (out)" />
+                    <event_id input_type="text" label="Event Id (out)" />
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Destroy this droplet</description><function extension="digocn_ext.digocncmds" name="digocn_destroy_droplet">
+                    <id input_type="text" label="Droplet Id">[[id]]</id>
+                    <scrub break_after="true" input_type="checkbox" label="Scrub Data?">0</scrub>
+                    <wait input_type="checkbox" label="Wait Until Done?">0</wait>
+                    <timeout break_after="true" input_type="text" label="Timeout Waiting Until Done" />
+                    <status input_type="text" label="Request Status (out)">r</status>
+                    <message break_after="true" input_type="text" label="Message (out)">m</message>
+                    <event_id input_type="text" label="Event Id (out)">e</event_id>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>List a particular image</description><function extension="digocn_ext.digocncmds" name="digocn_call">
+                    <noun dataset="droplets|regions|images|ssh_keys|sizes|domains|events" datasource="local" input_type="dropdown" label="Noun">images</noun>
+                    <action break_after="true" input_type="text" label="Action" />
+                    <subject break_after="true" input_type="text" label="Subject">3101918</subject>
+                    <params is_array="true" label="Parameters">
+                        <param label="Parameter">
+                            <name input_type="text" label="Parameter name" />
+                            <value input_type="text" label="Value" />
+                        </param>
+                    </params>
+                    <status input_type="text" label="Request Status (out)">s</status>
+                    <message input_type="text" label="Message (out)">m</message>
+                    <results input_type="text" label="Results (out)">r</results>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Print the status, message (if any) and results</description><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">status = [[s]], message = [[m]]
+results = [[r]]</message>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>List all images</description><function extension="digocn_ext.digocncmds" name="digocn_call">
+                    <noun dataset="droplets|regions|images|ssh_keys|sizes|domains|events" datasource="local" input_type="dropdown" label="Noun">images</noun>
+                    <action break_after="true" input_type="text" label="Action" />
+                    <subject break_after="true" input_type="text" label="Subject" />
+                    <params is_array="true" label="Parameters">
+                        <param label="Parameter">
+                            <name input_type="text" label="Parameter name" />
+                            <value input_type="text" label="Value" />
+                        </param>
+                    </params>
+                    <status input_type="text" label="Request Status (out)" />
+                    <message input_type="text" label="Message (out)" />
+                    <results input_type="text" label="Results (out)">r</results>
+				</function></step><step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0"><description>Print the results</description><function name="log_msg" snip="message">
+					<message class="w95pct" input_type="textarea" label="Log" label_style="display: block;" required="true" rows="2">[[r]]</message>
+				</function></step></steps></codeblock></codeblocks></task></tasks>
