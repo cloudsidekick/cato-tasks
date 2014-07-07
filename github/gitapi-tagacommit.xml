@@ -1,0 +1,68 @@
+<tasks>
+	<task code="git" concurrent_instances="None" name="git api - tag a commit" original_task_id="c3651461-f1d6-11e3-883c-3c15c2d0c8fe" queue_depth="None" status="Development" version="1.000">
+		<description>Use the GitHub API to Tag a specific commit.</description>
+		<codeblocks>
+			<codeblock name="MAIN">
+				<steps>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+						<description />
+						<function name="comment">
+							<comment>FROM: https://developer.github.com/v3/git/refs/#create-a-reference</comment>
+						</function>
+					</step>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="2" output_row_delimiter="0">
+						<description />
+						<function name="http" parse_method="2">
+							<type>POST</type>
+							<url>https://api.github.com/repos/&lt;githubaccount&gt;/&lt;reponame&gt;/git/refs</url>
+							<data>{
+								"ref": "refs/tags/test_tag",
+								"sha": "a97a2b062b4ff80f812d3f6e70161d04e826d530"
+								}</data>
+							<headers is_array="true">
+								<pair>
+									<key>Authorization</key>
+									<value>token &lt;your auth token&gt;</value>
+								</pair>
+								<pair>
+									<key>Content-Type</key>
+									<value>application/json</value>
+								</pair>
+							</headers>
+							<timeout>10</timeout>
+							<retries>1</retries>
+							<status_code />
+							<status_msg />
+							<response_header />
+							<cookie_out />
+							<response_body />
+							<response_time_ms />
+						</function>
+					</step>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="2" output_row_delimiter="0">
+						<description />
+						<function name="http" parse_method="2">
+							<type>DELETE</type>
+							<url>https://api.github.com/repos/&lt;githubaccount&gt;/&lt;reponame&gt;/git/refs/tags/test_tag</url>
+							<data />
+							<headers is_array="true">
+								<pair>
+									<key>Authorization</key>
+									<value>token &lt;your auth token&gt;</value>
+								</pair>
+							</headers>
+							<timeout>10</timeout>
+							<retries>1</retries>
+							<status_code />
+							<status_msg />
+							<response_header />
+							<cookie_out />
+							<response_body />
+							<response_time_ms />
+						</function>
+					</step>
+				</steps>
+			</codeblock>
+		</codeblocks>
+	</task>
+</tasks>

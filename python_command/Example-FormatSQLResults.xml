@@ -1,0 +1,74 @@
+<tasks>
+	<task code="example" concurrent_instances="None" name="Example-FormatSQLResults" original_task_id="99e5d7b0-fd3d-11e3-89ad-3c15c2d0c8fe" queue_depth="None" status="Development" version="1.000">
+		<description />
+		<codeblocks>
+			<codeblock name="MAIN">
+				<steps>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+						<description />
+						<function name="set_debug_level">
+							<debug_level>10</debug_level>
+						</function>
+					</step>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+						<description />
+						<function name="new_connection">
+							<conn_type>mysql</conn_type>
+							<cloud_name />
+							<asset>LocalMySql</asset>
+							<conn_name>CONN1</conn_name>
+							<debug />
+						</function>
+					</step>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="1" output_row_delimiter="0">
+						<description />
+						<function name="sql_exec" parse_method="1">
+							<conn_name>CONN1</conn_name>
+							<mode>SQL</mode>
+							<sql>select username, full_name from users</sql>
+							<handle />
+							<result_variable>ROWS</result_variable>
+							<pairs>
+								<pair>
+									<key />
+									<value />
+								</pair>
+							</pairs>
+						</function>
+					</step>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+						<description />
+						<function extension="utility.utility" name="exec_python">
+							<code># The VARS object has all the variables set in previous commands.
+								rows = VARS.get("ROWS")
+
+								trs = ""
+								for row in rows:
+								tr = ""
+								for col in row:
+								tr += "&lt;td&gt;%s&lt;/td&gt;" % (col)
+								trs += "&lt;tr&gt;%s&lt;/tr&gt;" % (tr)
+
+								# now, save the 'data' into the runtime VARS so we can access it in another step
+								VARS.set("TABLEROWS", trs)</code>
+						</function>
+					</step>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+						<description />
+						<function name="log_msg">
+							<message>&lt;table&gt;
+								&lt;thead&gt;
+								&lt;th&gt;date&lt;/th&gt;
+								&lt;th&gt;count&lt;/th&gt;
+								&lt;/thead&gt;
+								&lt;tbody&gt;
+								[$ TABLEROWS $]
+								&lt;/tbody&gt;
+								&lt;/table&gt;</message>
+						</function>
+					</step>
+				</steps>
+			</codeblock>
+		</codeblocks>
+	</task>
+</tasks>

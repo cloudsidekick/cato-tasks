@@ -1,0 +1,59 @@
+<tasks>
+	<task code="ex-14" concurrent_instances="None" name="Example-QueryAndLoop" original_task_id="ec074740-fd72-11e3-a835-3c15c2d0c8fe" queue_depth="None" status="Development" version="1.000">
+		<description />
+		<codeblocks>
+			<codeblock name="MAIN">
+				<steps>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+						<description />
+						<function name="set_debug_level">
+							<debug_level>10</debug_level>
+						</function>
+					</step>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+						<description />
+						<function name="datastore_query">
+							<collection>my_collection</collection>
+							<query>{"widget_id": { "$exists": "true" }}</query>
+							<sort />
+							<limit />
+							<columns is_array="true">
+								<column>
+									<name>widget_id</name>
+									<variable>WIDGET_ID</variable>
+								</column>
+								<column>
+									<name>data</name>
+									<variable>DATA</variable>
+								</column>
+							</columns>
+							<result_var>foo</result_var>
+						</function>
+					</step>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+						<description />
+						<function name="log_msg">
+							<message>[$foo[:]$]</message>
+						</function>
+					</step>
+					<step codeblock="MAIN" commented="false" output_column_delimiter="0" output_parse_type="0" output_row_delimiter="0">
+						<description />
+						<function name="loop">
+							<start>0</start>
+							<counter>x</counter>
+							<test>&lt;=</test>
+							<compare_to>[$ len(WIDGET_ID)-1 $]</compare_to>
+							<increment>1</increment>
+							<action>
+								<function name="log_msg">
+									<message>[$ asjson(DATA[[$X$]]) $]</message>
+								</function>
+							</action>
+							<max>100</max>
+						</function>
+					</step>
+				</steps>
+			</codeblock>
+		</codeblocks>
+	</task>
+</tasks>
