@@ -8,11 +8,11 @@ Prerequisites
 
 A vCloud account and cloud endpoint must be established before running this task. See the following links for more information on setting up an account and cloud endpoint. 
 
-[vCloud Configuration](http://docs.cloudsidekick.com/docs/cato/cloud/vcloud.html)
+[vCloud Configuration](http://docs.clearcodelabs.com/docs/automate/cloud/vcloud.html)
 
-[Generic Cloud Account Configuration](http://docs.cloudsidekick.com/docs/cato/cloud/cloud-account.html)
+[Generic Cloud Account Configuration](http://docs.clearcodelabs.com/docs/automate/cloud/cloud-account.html)
 
-[Generic Cloud Endpoint Configuration](http://docs.cloudsidekick.com/docs/cato/cloud/cloud-endpoint.html)
+[Generic Cloud Endpoint Configuration](http://docs.clearcodelabs.com/docs/automate/cloud/cloud-endpoint.html)
 
 Walkthrough
 -----------
