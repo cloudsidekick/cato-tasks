@@ -1,0 +1,119 @@
+[
+    {
+        "Status": "Development", 
+        "Code": "ex-021", 
+        "Description": "An example of generating a unique name for some purpose using a UUID, also example of using substring command", 
+        "Parameters": [], 
+        "QueueDepth": null, 
+        "MaxVersion": 1.0, 
+        "IsDefaultVersion": true, 
+        "NextMinorVersion": "1.001", 
+        "Version": 1.0, 
+        "NextMajorVersion": "2.000", 
+        "NumberOfApprovedVersions": 0, 
+        "Codeblocks": [
+            {
+                "Steps": [
+                    {
+                        "FunctionDefinition": {
+                            "__name": "log_msg", 
+                            "message": {
+                                "message": "a new uuid with dashes is [$_UUID$]"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "example generating a uuid with dashes", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "log_msg"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "log_msg", 
+                            "message": {
+                                "message": "a new uuid without dashes is [$_UUID2$]"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "example generating a uuid without dashes", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "log_msg"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "substring", 
+                            "variable_name": {
+                                "variable_name": "name_part"
+                            }, 
+                            "end": {
+                                "end": "8"
+                            }, 
+                            "start": {
+                                "start": "1"
+                            }, 
+                            "source": {
+                                "source": "[$_UUID$]"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "get the first 8 characters of a uuid. first character is position 1", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "substring"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "set_variable", 
+                            "variables": {
+                                "Item::variable::0": {
+                                    "modifier": {
+                                        "modifier": "DEFAULT"
+                                    }, 
+                                    "name": {
+                                        "name": "name"
+                                    }, 
+                                    "value": {
+                                        "value": "SQL-[$name_part$]"
+                                    }
+                                }, 
+                                "__is_array": "true"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "append the unique string to a fixed name part", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "set_variable"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "log_msg", 
+                            "message": {
+                                "message": "our server name is [$name$], this should be pretty darn unique"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "print the full now unique name", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "log_msg"
+                    }
+                ], 
+                "Name": "MAIN"
+            }
+        ], 
+        "ConcurrentInstances": null, 
+        "Name": "Example - Generating a Unique Name"
+    }
+]
