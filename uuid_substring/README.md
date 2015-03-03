@@ -5,6 +5,11 @@ This example will show you how to generate a unique string that can be used as p
 
 It also will illustrate the use of the task command "substring".
 
+Importing the Task
+------------------
+
+Import the task into Automate using the Task, Import a Backup File menu choice. Paste the following link into the "Enter a URL:" box, then click "Load", then "Import". 
+
 Walkthrough
 -----------
 
