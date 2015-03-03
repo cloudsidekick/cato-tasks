@@ -8,7 +8,9 @@ It also will illustrate the use of the task command "substring".
 Importing the Task
 ------------------
 
-Import the task into Automate using the Task, Import a Backup File menu choice. Paste the following link into the "Enter a URL:" box, then click "Load", then "Import". 
+Import the example task into Automate using the Task, Import a Backup File menu choice. Paste the following link into the "Enter a URL:" box, then click "Load", then "Import". 
+
+https://raw.githubusercontent.com/cloudsidekick/cato-tasks/master/uuid_substring/uuid_substring.json
 
 Walkthrough
 -----------
