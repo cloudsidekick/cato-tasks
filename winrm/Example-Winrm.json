@@ -1,0 +1,719 @@
+[
+    {
+        "Status": "Development", 
+        "Code": "ex-17", 
+        "Description": "Demonstrates how to connect to a winrm enabled Windows server and run both powershell and DOS commands.", 
+        "Parameters": [
+            {
+                "prompt": "true", 
+                "name": "address", 
+                "required": "true", 
+                "present_as": "value", 
+                "values": [
+                    ""
+                ], 
+                "encrypt": "false"
+            }, 
+            {
+                "prompt": "true", 
+                "name": "user", 
+                "required": "true", 
+                "present_as": "value", 
+                "values": [
+                    ""
+                ], 
+                "encrypt": "false"
+            }, 
+            {
+                "prompt": "true", 
+                "name": "password", 
+                "required": "true", 
+                "present_as": "value", 
+                "values": [
+                    ""
+                ], 
+                "encrypt": "false"
+            }
+        ], 
+        "QueueDepth": null, 
+        "MaxVersion": 1.0, 
+        "IsDefaultVersion": true, 
+        "NextMinorVersion": "1.001", 
+        "Version": 1.0, 
+        "NextMajorVersion": "2.000", 
+        "NumberOfApprovedVersions": 0, 
+        "Codeblocks": [
+            {
+                "Steps": [
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "conn_name": "CONN1", 
+                                "__label": "as", 
+                                "__input_type": "text", 
+                                "__required": "true", 
+                                "__class": "w200px", 
+                                "__help": "Name this connection for reference in the Task."
+                            }, 
+                            "cloud_name": {
+                                "__input_type": "dropdown", 
+                                "__style": "combo", 
+                                "cloud_name": ""
+                            }, 
+                            "debug": {
+                                "debug": "0", 
+                                "__break_after": "true", 
+                                "__label": "Debug", 
+                                "__input_type": "checkbox"
+                            }, 
+                            "conn_type": {
+                                "conn_type": "winrm", 
+                                "__input_type": "select"
+                            }, 
+                            "__name": "new_connection", 
+                            "asset": {
+                                "__input_type": "text", 
+                                "asset": "address=[[address]] userid=[[user]] password=[[password]] protocol=http port=5985"
+                            }, 
+                            "__snip": "conn_name"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "new_connection"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "set_variable", 
+                            "variables": {
+                                "variable": {
+                                    "modifier": {
+                                        "__input_type": "select", 
+                                        "modifier": "TO_BASE64_UTF16", 
+                                        "__label": "Modifier"
+                                    }, 
+                                    "__label": "Variable", 
+                                    "name": {
+                                        "__input_type": "text", 
+                                        "__label": "Name", 
+                                        "name": "s"
+                                    }, 
+                                    "value": {
+                                        "__input_type": "text", 
+                                        "__label": "Value", 
+                                        "value": "$stream = [System.IO.StreamWriter] \"c:\\csk_test.txt\"\n$s = @\"\n[[t]]\n\"@ | %{ $_.Replace(\"`n\",\"`r`n\") }\n$stream.WriteLine($s)\n$stream.close()"
+                                    }
+                                }, 
+                                "__label": "Variables"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "set_variable"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "__input_type": "text", 
+                                "__label": "Connection", 
+                                "__connection_picker": "true", 
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "return_code": {
+                                "__break_after": "true", 
+                                "return_code": "r", 
+                                "__label": "Return Code", 
+                                "__option_tab": "Options", 
+                                "__input_type": "text"
+                            }, 
+                            "__name": "winrm_cmd", 
+                            "command": {
+                                "__input_type": "textarea", 
+                                "__label": "Command", 
+                                "__style": "display: block;", 
+                                "command": "powershell -encodedcommand [[s]]", 
+                                "__class": "w95pct", 
+                                "__rows": "3"
+                            }, 
+                            "timeout": {
+                                "__break_after": "true", 
+                                "__label": "Timeout", 
+                                "__option_tab": "Options", 
+                                "timeout": "", 
+                                "__input_type": "text"
+                            }, 
+                            "__snip": "command", 
+                            "__variables": "true"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "winrm_cmd"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "__input_type": "text", 
+                                "__label": "Connection", 
+                                "__connection_picker": "true", 
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "return_code": {
+                                "__break_after": "true", 
+                                "return_code": "r", 
+                                "__label": "Return Code", 
+                                "__option_tab": "Options", 
+                                "__input_type": "text"
+                            }, 
+                            "__name": "winrm_cmd", 
+                            "command": {
+                                "__input_type": "textarea", 
+                                "__label": "Command", 
+                                "__style": "display: block;", 
+                                "command": "dir c:\\", 
+                                "__class": "w95pct", 
+                                "__rows": "3"
+                            }, 
+                            "timeout": {
+                                "__break_after": "true", 
+                                "__label": "Timeout", 
+                                "__option_tab": "Options", 
+                                "timeout": "", 
+                                "__input_type": "text"
+                            }, 
+                            "__snip": "command", 
+                            "__variables": "true"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "winrm_cmd"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__snip": "message", 
+                            "__name": "log_msg", 
+                            "message": {
+                                "__input_type": "textarea", 
+                                "__label": "Log", 
+                                "__required": "true", 
+                                "__label_style": "display: block;", 
+                                "__class": "w95pct", 
+                                "message": "return code was [[r]]", 
+                                "__rows": "2"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "log_msg"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "__input_type": "text", 
+                                "__label": "Connection", 
+                                "__connection_picker": "true", 
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "__name": "winrm_cmd", 
+                            "command": {
+                                "__input_type": "textarea", 
+                                "__label": "Command", 
+                                "__style": "display: block;", 
+                                "command": "type c:\\csk_test.txt", 
+                                "__class": "w95pct", 
+                                "__rows": "3"
+                            }, 
+                            "timeout": {
+                                "__break_after": "true", 
+                                "__label": "Timeout", 
+                                "__option_tab": "Options", 
+                                "timeout": "", 
+                                "__input_type": "text"
+                            }, 
+                            "__snip": "command", 
+                            "__variables": "true"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "winrm_cmd"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "__input_type": "text", 
+                                "__label": "Connection", 
+                                "__connection_picker": "true", 
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "__name": "winrm_cmd", 
+                            "command": {
+                                "__input_type": "textarea", 
+                                "__label": "Command", 
+                                "__style": "display: block;", 
+                                "command": "del c:\\csk_test.txt", 
+                                "__class": "w95pct", 
+                                "__rows": "3"
+                            }, 
+                            "timeout": {
+                                "__break_after": "true", 
+                                "__label": "Timeout", 
+                                "__option_tab": "Options", 
+                                "timeout": "", 
+                                "__input_type": "text"
+                            }, 
+                            "__snip": "command", 
+                            "__variables": "true"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "winrm_cmd"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "__input_type": "text", 
+                                "__label": "Connection", 
+                                "__connection_picker": "true", 
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "return_code": {
+                                "__break_after": "true", 
+                                "return_code": "r", 
+                                "__label": "Return Code", 
+                                "__option_tab": "Options", 
+                                "__input_type": "text"
+                            }, 
+                            "__name": "winrm_cmd", 
+                            "command": {
+                                "__input_type": "textarea", 
+                                "__label": "Command", 
+                                "__style": "display: block;", 
+                                "command": "dir c:\\csk_test.txt", 
+                                "__class": "w95pct", 
+                                "__rows": "3"
+                            }, 
+                            "timeout": {
+                                "__break_after": "true", 
+                                "__label": "Timeout", 
+                                "__option_tab": "Options", 
+                                "timeout": "", 
+                                "__input_type": "text"
+                            }, 
+                            "__snip": "command", 
+                            "__variables": "true"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "winrm_cmd"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__snip": "message", 
+                            "__name": "log_msg", 
+                            "message": {
+                                "__input_type": "textarea", 
+                                "__label": "Log", 
+                                "__required": "true", 
+                                "__label_style": "display: block;", 
+                                "__class": "w95pct", 
+                                "message": "return code was [[r]]", 
+                                "__rows": "2"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "log_msg"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "__input_type": "text", 
+                                "__label": "Connection", 
+                                "__connection_picker": "true", 
+                                "conn_name": "CONN1"
+                            }, 
+                            "__row_delimiter": "10", 
+                            "__col_delimiter": "32", 
+                            "step_variables": {
+                                "Item::variable::2": {
+                                    "position": {
+                                        "position": "3"
+                                    }, 
+                                    "type": {
+                                        "type": "delimited"
+                                    }, 
+                                    "name": {
+                                        "name": "v3"
+                                    }
+                                }, 
+                                "Item::variable::3": {
+                                    "position": {
+                                        "position": "4"
+                                    }, 
+                                    "type": {
+                                        "type": "delimited"
+                                    }, 
+                                    "name": {
+                                        "name": "v4"
+                                    }
+                                }, 
+                                "Item::variable::0": {
+                                    "position": {
+                                        "position": "1"
+                                    }, 
+                                    "type": {
+                                        "type": "delimited"
+                                    }, 
+                                    "name": {
+                                        "name": "v1"
+                                    }
+                                }, 
+                                "Item::variable::1": {
+                                    "position": {
+                                        "position": "2"
+                                    }, 
+                                    "type": {
+                                        "type": "delimited"
+                                    }, 
+                                    "name": {
+                                        "name": "v2"
+                                    }
+                                }, 
+                                "Item::variable::4": {
+                                    "position": {
+                                        "position": "5"
+                                    }, 
+                                    "type": {
+                                        "type": "delimited"
+                                    }, 
+                                    "name": {
+                                        "name": "v5"
+                                    }
+                                }, 
+                                "Item::variable::5": {
+                                    "position": {
+                                        "position": "6"
+                                    }, 
+                                    "type": {
+                                        "type": "delimited"
+                                    }, 
+                                    "name": {
+                                        "name": "v6"
+                                    }
+                                }
+                            }, 
+                            "__parse_method": "2", 
+                            "__name": "winrm_cmd", 
+                            "command": {
+                                "__input_type": "textarea", 
+                                "__label": "Command", 
+                                "__style": "display: block;", 
+                                "command": "wmic cpu get loadpercentage | findstr /V LoadPercentage", 
+                                "__class": "w95pct", 
+                                "__rows": "3"
+                            }, 
+                            "timeout": {
+                                "__break_after": "true", 
+                                "__label": "Timeout", 
+                                "__option_tab": "Options", 
+                                "timeout": "", 
+                                "__input_type": "text"
+                            }, 
+                            "__snip": "command", 
+                            "__variables": "true"
+                        }, 
+                        "OutputRowDelimiter": 10, 
+                        "OutputParseType": 2, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 32, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "winrm_cmd"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "start": {
+                                "__input_type": "text", 
+                                "start": "1"
+                            }, 
+                            "max": {
+                                "__input_type": "text", 
+                                "max": ""
+                            }, 
+                            "counter": {
+                                "__input_type": "text", 
+                                "counter": "z"
+                            }, 
+                            "__name": "loop", 
+                            "test": {
+                                "test": "<=", 
+                                "__input_type": "select"
+                            }, 
+                            "increment": {
+                                "__input_type": "text", 
+                                "increment": "1"
+                            }, 
+                            "compare_to": {
+                                "__input_type": "text", 
+                                "compare_to": "[[v1,*]]"
+                            }, 
+                            "action": {
+                                "function": {
+                                    "__snip": "message", 
+                                    "__name": "log_msg", 
+                                    "message": {
+                                        "__input_type": "textarea", 
+                                        "__label": "Log", 
+                                        "__required": "true", 
+                                        "__label_style": "display: block;", 
+                                        "__class": "w95pct", 
+                                        "message": "-[[v1,[[z]]]]- -[[v2,[[z]]]]- -[[v3,[[z]]]]- -[[v4,[[z]]]]- -[[v5,[[z]]]]- -[[v6,[[z]]]]-", 
+                                        "__rows": "2"
+                                    }
+                                }
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "loop"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "set_variable", 
+                            "variables": {
+                                "variable": {
+                                    "modifier": {
+                                        "__input_type": "select", 
+                                        "modifier": "TO_BASE64_UTF16", 
+                                        "__label": "Modifier"
+                                    }, 
+                                    "__label": "Variable", 
+                                    "name": {
+                                        "__input_type": "text", 
+                                        "__label": "Name", 
+                                        "name": "s"
+                                    }, 
+                                    "value": {
+                                        "__input_type": "text", 
+                                        "__label": "Value", 
+                                        "value": "$HostInfo = @()\n\n$ProcessorStats = Get-WmiObject win32_processor -computer .\n$ComputerCpu = $ProcessorStats.LoadPercentage \n$OperatingSystem = Get-WmiObject win32_OperatingSystem -computer .\n$FreeMemory = $OperatingSystem.FreePhysicalMemory\n$TotalMemory = $OperatingSystem.TotalVisibleMemorySize\n$MemoryUsed = ($FreeMemory/ $TotalMemory) * 100\n$PercentMemoryUsed = \"{0:N2}\" -f $MemoryUsed\n\n$objHostInfo = New-Object System.Object\n$objHostInfo | Add-Member -MemberType NoteProperty -Name CPULoadPercent -Value $ComputerCpu\n$objHostInfo | Add-Member -MemberType NoteProperty -Name MemoryUsedPercent -Value $PercentMemoryUsed\n\n# Lets output to the console\n$objHostInfo"
+                                    }
+                                }, 
+                                "__label": "Variables"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "set_variable"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "__input_type": "text", 
+                                "__label": "Connection", 
+                                "__connection_picker": "true", 
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "__name": "winrm_cmd", 
+                            "command": {
+                                "__input_type": "textarea", 
+                                "__label": "Command", 
+                                "__style": "display: block;", 
+                                "command": "powershell -encodedcommand [[s]]", 
+                                "__class": "w95pct", 
+                                "__rows": "3"
+                            }, 
+                            "timeout": {
+                                "__break_after": "true", 
+                                "__label": "Timeout", 
+                                "__option_tab": "Options", 
+                                "timeout": "", 
+                                "__input_type": "text"
+                            }, 
+                            "__snip": "command", 
+                            "__variables": "true"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "winrm_cmd"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "start": {
+                                "__input_type": "text", 
+                                "start": "1"
+                            }, 
+                            "max": {
+                                "__input_type": "text", 
+                                "max": ""
+                            }, 
+                            "counter": {
+                                "__input_type": "text", 
+                                "counter": "z"
+                            }, 
+                            "__name": "loop", 
+                            "test": {
+                                "test": "<=", 
+                                "__input_type": "select"
+                            }, 
+                            "increment": {
+                                "__input_type": "text", 
+                                "increment": "1"
+                            }, 
+                            "compare_to": {
+                                "__input_type": "text", 
+                                "compare_to": "[[v1,*]]"
+                            }, 
+                            "action": {
+                                "function": {
+                                    "__snip": "message", 
+                                    "__name": "log_msg", 
+                                    "message": {
+                                        "__input_type": "textarea", 
+                                        "__label": "Log", 
+                                        "__required": "true", 
+                                        "__label_style": "display: block;", 
+                                        "__class": "w95pct", 
+                                        "message": "-[[v1,[[z]]]]- -[[v2,[[z]]]]- -[[v3,[[z]]]]- -[[v4,[[z]]]]- -[[v5,[[z]]]]- -[[v6,[[z]]]]-", 
+                                        "__rows": "2"
+                                    }
+                                }
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "loop"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "set_variable", 
+                            "variables": {
+                                "variable": {
+                                    "modifier": {
+                                        "__input_type": "select", 
+                                        "modifier": "TO_BASE64_UTF16", 
+                                        "__label": "Modifier"
+                                    }, 
+                                    "__label": "Variable", 
+                                    "name": {
+                                        "__input_type": "text", 
+                                        "__label": "Name", 
+                                        "name": "s"
+                                    }, 
+                                    "value": {
+                                        "__input_type": "text", 
+                                        "__label": "Value", 
+                                        "value": "$HostInfo = @()\n\n$ProcessorStats = Get-WmiObject win32_processor -computer .\n$ComputerCpu = $ProcessorStats.LoadPercentage \n$OperatingSystem = Get-WmiObject win32_OperatingSystem -computer .\n$FreeMemory = $OperatingSystem.FreePhysicalMemory\n$TotalMemory = $OperatingSystem.TotalVisibleMemorySize\n$MemoryUsed = ($FreeMemory/ $TotalMemory) * 100\n$PercentMemoryUsed = \"{0:N2}\" -f $MemoryUsed\n\n$objHostInfo = New-Object System.Object\n$objHostInfo | Add-Member -MemberType NoteProperty -Name CPULoadPercent -Value $ComputerCpu\n$objHostInfo | Add-Member -MemberType NoteProperty -Name MemoryUsedPercent -Value $PercentMemoryUsed\n\n# Lets output to the console\n$objHostInfo"
+                                    }
+                                }, 
+                                "__label": "Variables"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "set_variable"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "__input_type": "text", 
+                                "__label": "Connection", 
+                                "__connection_picker": "true", 
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "__name": "winrm_cmd", 
+                            "command": {
+                                "__input_type": "textarea", 
+                                "__label": "Command", 
+                                "__style": "display: block;", 
+                                "command": "powershell -encodedcommand [[s]]", 
+                                "__class": "w95pct", 
+                                "__rows": "3"
+                            }, 
+                            "timeout": {
+                                "__break_after": "true", 
+                                "__label": "Timeout", 
+                                "__option_tab": "Options", 
+                                "timeout": "", 
+                                "__input_type": "text"
+                            }, 
+                            "__snip": "command", 
+                            "__variables": "true"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "winrm_cmd"
+                    }
+                ], 
+                "Name": "MAIN"
+            }
+        ], 
+        "ConcurrentInstances": null, 
+        "Name": "Example - Winrm"
+    }
+]
