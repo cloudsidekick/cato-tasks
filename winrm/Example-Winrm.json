@@ -2,7 +2,7 @@
     {
         "Status": "Development", 
         "Code": "ex-17", 
-        "Description": "Demonstrates how to connect to a winrm enabled Windows server and run both powershell and DOS commands.", 
+        "Description": "Demonstrates the following: parameters, connecting to windows using winrm, powershell, setting variables from winrm session, looping through variables, winrm error handling, various windows management commands", 
         "Parameters": [
             {
                 "prompt": "true", 
@@ -73,13 +73,13 @@
                             "__name": "new_connection", 
                             "asset": {
                                 "__input_type": "text", 
-                                "asset": "address=[[address]] userid=[[user]] password=[[password]] protocol=http port=5985"
+                                "asset": "address=[$address$] userid=[$user$] password=[$password$] protocol=http port=5985"
                             }, 
                             "__snip": "conn_name"
                         }, 
                         "OutputRowDelimiter": 0, 
                         "OutputParseType": 0, 
-                        "Description": "", 
+                        "Description": "establish winrm connection to target server", 
                         "OutputColumnDelimiter": 0, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
@@ -91,20 +91,13 @@
                             "variables": {
                                 "variable": {
                                     "modifier": {
-                                        "__input_type": "select", 
-                                        "modifier": "TO_BASE64_UTF16", 
-                                        "__label": "Modifier"
+                                        "modifier": "DEFAULT"
                                     }, 
-                                    "__label": "Variable", 
                                     "name": {
-                                        "__input_type": "text", 
-                                        "__label": "Name", 
-                                        "name": "s"
+                                        "name": "target_dir"
                                     }, 
                                     "value": {
-                                        "__input_type": "text", 
-                                        "__label": "Value", 
-                                        "value": "$stream = [System.IO.StreamWriter] \"c:\\csk_test.txt\"\n$s = @\"\n[[t]]\n\"@ | %{ $_.Replace(\"`n\",\"`r`n\") }\n$stream.WriteLine($s)\n$stream.close()"
+                                        "value": "c:"
                                     }
                                 }, 
                                 "__label": "Variables"
@@ -112,7 +105,7 @@
                         }, 
                         "OutputRowDelimiter": 0, 
                         "OutputParseType": 0, 
-                        "Description": "", 
+                        "Description": "set a variable to the text we want to put in the file and set target directory", 
                         "OutputColumnDelimiter": 0, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
@@ -121,45 +114,30 @@
                     {
                         "FunctionDefinition": {
                             "conn_name": {
-                                "__input_type": "text", 
-                                "__label": "Connection", 
-                                "__connection_picker": "true", 
                                 "conn_name": "CONN1"
                             }, 
                             "__parse_method": "2", 
                             "return_code": {
-                                "__break_after": "true", 
-                                "return_code": "r", 
-                                "__label": "Return Code", 
-                                "__option_tab": "Options", 
-                                "__input_type": "text"
+                                "return_code": ""
                             }, 
-                            "__name": "winrm_cmd", 
+                            "result_variable": {
+                                "result_variable": ""
+                            }, 
+                            "__name": "winrm_psh", 
                             "command": {
-                                "__input_type": "textarea", 
-                                "__label": "Command", 
-                                "__style": "display: block;", 
-                                "command": "powershell -encodedcommand [[s]]", 
-                                "__class": "w95pct", 
-                                "__rows": "3"
+                                "command": "$stream = [System.IO.StreamWriter] \"[$target_dir$]\\ccl_test.txt\"\n$s = @\"\n[$text$]\n\"@ | %{ $_.Replace(\"`n\",\"`r`n\") }\n$stream.WriteLine($s)\n$stream.close()"
                             }, 
                             "timeout": {
-                                "__break_after": "true", 
-                                "__label": "Timeout", 
-                                "__option_tab": "Options", 
-                                "timeout": "", 
-                                "__input_type": "text"
-                            }, 
-                            "__snip": "command", 
-                            "__variables": "true"
+                                "timeout": ""
+                            }
                         }, 
                         "OutputRowDelimiter": 0, 
                         "OutputParseType": 2, 
-                        "Description": "", 
+                        "Description": "powershell script that streams text to a file", 
                         "OutputColumnDelimiter": 0, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
-                        "FunctionName": "winrm_cmd"
+                        "FunctionName": "winrm_psh"
                     }, 
                     {
                         "FunctionDefinition": {
@@ -182,7 +160,7 @@
                                 "__input_type": "textarea", 
                                 "__label": "Command", 
                                 "__style": "display: block;", 
-                                "command": "dir c:\\", 
+                                "command": "dir [$target_dir$]\\ccl_test.txt", 
                                 "__class": "w95pct", 
                                 "__rows": "3"
                             }, 
@@ -198,7 +176,7 @@
                         }, 
                         "OutputRowDelimiter": 0, 
                         "OutputParseType": 2, 
-                        "Description": "", 
+                        "Description": "let's see if the file is there", 
                         "OutputColumnDelimiter": 0, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
@@ -214,13 +192,13 @@
                                 "__required": "true", 
                                 "__label_style": "display: block;", 
                                 "__class": "w95pct", 
-                                "message": "return code was [[r]]", 
+                                "message": "return code was [$r$], 0 return code means no errors", 
                                 "__rows": "2"
                             }
                         }, 
                         "OutputRowDelimiter": 0, 
                         "OutputParseType": 0, 
-                        "Description": "", 
+                        "Description": "print the return code from previous step", 
                         "OutputColumnDelimiter": 0, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
@@ -240,7 +218,7 @@
                                 "__input_type": "textarea", 
                                 "__label": "Command", 
                                 "__style": "display: block;", 
-                                "command": "type c:\\csk_test.txt", 
+                                "command": "type [$target_dir$]\\ccl_test.txt", 
                                 "__class": "w95pct", 
                                 "__rows": "3"
                             }, 
@@ -256,7 +234,7 @@
                         }, 
                         "OutputRowDelimiter": 0, 
                         "OutputParseType": 2, 
-                        "Description": "", 
+                        "Description": "type command prints file to stdout, like linux cat", 
                         "OutputColumnDelimiter": 0, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
@@ -276,7 +254,7 @@
                                 "__input_type": "textarea", 
                                 "__label": "Command", 
                                 "__style": "display: block;", 
-                                "command": "del c:\\csk_test.txt", 
+                                "command": "del [$target_dir$]\\ccl_test.txt", 
                                 "__class": "w95pct", 
                                 "__rows": "3"
                             }, 
@@ -292,11 +270,67 @@
                         }, 
                         "OutputRowDelimiter": 0, 
                         "OutputParseType": 2, 
-                        "Description": "", 
+                        "Description": "delete the file created previously", 
                         "OutputColumnDelimiter": 0, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
                         "FunctionName": "winrm_cmd"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "comment": {
+                                "comment": "set _IGNORE_WINRM_ERRORS to TRUE to ignore errors, FALSE to stop task execution on errors"
+                            }, 
+                            "__name": "comment"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "comment"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "set_variable", 
+                            "variables": {
+                                "Item::variable::0": {
+                                    "modifier": {
+                                        "modifier": "DEFAULT"
+                                    }, 
+                                    "name": {
+                                        "name": "_IGNORE_WINRM_ERRORS"
+                                    }, 
+                                    "value": {
+                                        "value": "FALSE"
+                                    }
+                                }, 
+                                "__is_array": "true"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "set the IGNORE_WINRM_ERROR flag", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "set_variable"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "log_msg", 
+                            "message": {
+                                "message": "NOTE: the next command will error. \nIf _IGNORE_WINRM_ERROR is FALSE, the task execution will stop. \nIf TRUE the task will continue.\nThe second time you run this task, in the previous step, change _IGNORE_WINRM_ERROR to TRUE. "
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "NOTE: the next command will error. ", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "log_msg"
                     }, 
                     {
                         "FunctionDefinition": {
@@ -319,7 +353,7 @@
                                 "__input_type": "textarea", 
                                 "__label": "Command", 
                                 "__style": "display: block;", 
-                                "command": "dir c:\\csk_test.txt", 
+                                "command": "dir [$target_dir$]\\ccl_test.txt", 
                                 "__class": "w95pct", 
                                 "__rows": "3"
                             }, 
@@ -335,7 +369,7 @@
                         }, 
                         "OutputRowDelimiter": 0, 
                         "OutputParseType": 2, 
-                        "Description": "", 
+                        "Description": "file should be gone", 
                         "OutputColumnDelimiter": 0, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
@@ -351,13 +385,74 @@
                                 "__required": "true", 
                                 "__label_style": "display: block;", 
                                 "__class": "w95pct", 
-                                "message": "return code was [[r]]", 
+                                "message": "return code was [$r$], 1 return code is an error", 
                                 "__rows": "2"
                             }
                         }, 
                         "OutputRowDelimiter": 0, 
                         "OutputParseType": 0, 
-                        "Description": "", 
+                        "Description": "print return code from previous step", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "log_msg"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "conn_name": "CONN1"
+                            }, 
+                            "__row_delimiter": "0", 
+                            "__col_delimiter": "0", 
+                            "step_variables": {
+                                "Item::variable::0": {
+                                    "range_end": {
+                                        "range_end": "end"
+                                    }, 
+                                    "range_begin": {
+                                        "range_begin": "1"
+                                    }, 
+                                    "type": {
+                                        "type": "range"
+                                    }, 
+                                    "name": {
+                                        "name": "load"
+                                    }
+                                }
+                            }, 
+                            "__parse_method": "2", 
+                            "result_variable": {
+                                "result_variable": ""
+                            }, 
+                            "return_code": {
+                                "return_code": ""
+                            }, 
+                            "__name": "winrm_cmd", 
+                            "command": {
+                                "command": "wmic cpu get loadpercentage | findstr /V LoadPercentage"
+                            }, 
+                            "timeout": {
+                                "timeout": ""
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "an example of using windows management instrumentation command line", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "winrm_cmd"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "log_msg", 
+                            "message": {
+                                "message": "load percentage is [$load$]"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "print load percentage variable", 
                         "OutputColumnDelimiter": 0, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
@@ -372,30 +467,8 @@
                                 "conn_name": "CONN1"
                             }, 
                             "__row_delimiter": "10", 
-                            "__col_delimiter": "32", 
+                            "__col_delimiter": "61", 
                             "step_variables": {
-                                "Item::variable::2": {
-                                    "position": {
-                                        "position": "3"
-                                    }, 
-                                    "type": {
-                                        "type": "delimited"
-                                    }, 
-                                    "name": {
-                                        "name": "v3"
-                                    }
-                                }, 
-                                "Item::variable::3": {
-                                    "position": {
-                                        "position": "4"
-                                    }, 
-                                    "type": {
-                                        "type": "delimited"
-                                    }, 
-                                    "name": {
-                                        "name": "v4"
-                                    }
-                                }, 
                                 "Item::variable::0": {
                                     "position": {
                                         "position": "1"
@@ -404,7 +477,7 @@
                                         "type": "delimited"
                                     }, 
                                     "name": {
-                                        "name": "v1"
+                                        "name": "VARNAME"
                                     }
                                 }, 
                                 "Item::variable::1": {
@@ -415,29 +488,7 @@
                                         "type": "delimited"
                                     }, 
                                     "name": {
-                                        "name": "v2"
-                                    }
-                                }, 
-                                "Item::variable::4": {
-                                    "position": {
-                                        "position": "5"
-                                    }, 
-                                    "type": {
-                                        "type": "delimited"
-                                    }, 
-                                    "name": {
-                                        "name": "v5"
-                                    }
-                                }, 
-                                "Item::variable::5": {
-                                    "position": {
-                                        "position": "6"
-                                    }, 
-                                    "type": {
-                                        "type": "delimited"
-                                    }, 
-                                    "name": {
-                                        "name": "v6"
+                                        "name": "VALUE"
                                     }
                                 }
                             }, 
@@ -447,7 +498,7 @@
                                 "__input_type": "textarea", 
                                 "__label": "Command", 
                                 "__style": "display: block;", 
-                                "command": "wmic cpu get loadpercentage | findstr /V LoadPercentage", 
+                                "command": "set", 
                                 "__class": "w95pct", 
                                 "__rows": "3"
                             }, 
@@ -463,8 +514,8 @@
                         }, 
                         "OutputRowDelimiter": 10, 
                         "OutputParseType": 2, 
-                        "Description": "", 
-                        "OutputColumnDelimiter": 32, 
+                        "Description": "an example of populating variable arrays from winrm output", 
+                        "OutputColumnDelimiter": 61, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
                         "FunctionName": "winrm_cmd"
@@ -494,7 +545,7 @@
                             }, 
                             "compare_to": {
                                 "__input_type": "text", 
-                                "compare_to": "[[v1,*]]"
+                                "compare_to": "[$ len(VARNAME) $]"
                             }, 
                             "action": {
                                 "function": {
@@ -506,7 +557,7 @@
                                         "__required": "true", 
                                         "__label_style": "display: block;", 
                                         "__class": "w95pct", 
-                                        "message": "-[[v1,[[z]]]]- -[[v2,[[z]]]]- -[[v3,[[z]]]]- -[[v4,[[z]]]]- -[[v5,[[z]]]]- -[[v6,[[z]]]]-", 
+                                        "message": "env variable name = [$ VARNAME[ [$z$] ]$] \nvalue = [$VALUE[ [$z$] ]$]", 
                                         "__rows": "2"
                                     }
                                 }
@@ -514,7 +565,7 @@
                         }, 
                         "OutputRowDelimiter": 0, 
                         "OutputParseType": 0, 
-                        "Description": "", 
+                        "Description": "example of looping through variable arrays", 
                         "OutputColumnDelimiter": 0, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
@@ -522,192 +573,31 @@
                     }, 
                     {
                         "FunctionDefinition": {
-                            "__name": "set_variable", 
-                            "variables": {
-                                "variable": {
-                                    "modifier": {
-                                        "__input_type": "select", 
-                                        "modifier": "TO_BASE64_UTF16", 
-                                        "__label": "Modifier"
-                                    }, 
-                                    "__label": "Variable", 
-                                    "name": {
-                                        "__input_type": "text", 
-                                        "__label": "Name", 
-                                        "name": "s"
-                                    }, 
-                                    "value": {
-                                        "__input_type": "text", 
-                                        "__label": "Value", 
-                                        "value": "$HostInfo = @()\n\n$ProcessorStats = Get-WmiObject win32_processor -computer .\n$ComputerCpu = $ProcessorStats.LoadPercentage \n$OperatingSystem = Get-WmiObject win32_OperatingSystem -computer .\n$FreeMemory = $OperatingSystem.FreePhysicalMemory\n$TotalMemory = $OperatingSystem.TotalVisibleMemorySize\n$MemoryUsed = ($FreeMemory/ $TotalMemory) * 100\n$PercentMemoryUsed = \"{0:N2}\" -f $MemoryUsed\n\n$objHostInfo = New-Object System.Object\n$objHostInfo | Add-Member -MemberType NoteProperty -Name CPULoadPercent -Value $ComputerCpu\n$objHostInfo | Add-Member -MemberType NoteProperty -Name MemoryUsedPercent -Value $PercentMemoryUsed\n\n# Lets output to the console\n$objHostInfo"
-                                    }
-                                }, 
-                                "__label": "Variables"
-                            }
-                        }, 
-                        "OutputRowDelimiter": 0, 
-                        "OutputParseType": 0, 
-                        "Description": "", 
-                        "OutputColumnDelimiter": 0, 
-                        "Codeblock": "MAIN", 
-                        "Commented": false, 
-                        "FunctionName": "set_variable"
-                    }, 
-                    {
-                        "FunctionDefinition": {
                             "conn_name": {
-                                "__input_type": "text", 
-                                "__label": "Connection", 
-                                "__connection_picker": "true", 
                                 "conn_name": "CONN1"
                             }, 
                             "__parse_method": "2", 
-                            "__name": "winrm_cmd", 
+                            "return_code": {
+                                "return_code": ""
+                            }, 
+                            "result_variable": {
+                                "result_variable": ""
+                            }, 
+                            "__name": "winrm_psh", 
                             "command": {
-                                "__input_type": "textarea", 
-                                "__label": "Command", 
-                                "__style": "display: block;", 
-                                "command": "powershell -encodedcommand [[s]]", 
-                                "__class": "w95pct", 
-                                "__rows": "3"
+                                "command": "$HostInfo = @()\n\n$ProcessorStats = Get-WmiObject win32_processor -computer .\n$ComputerCpu = $ProcessorStats.LoadPercentage \n$OperatingSystem = Get-WmiObject win32_OperatingSystem -computer .\n$FreeMemory = $OperatingSystem.FreePhysicalMemory\n$TotalMemory = $OperatingSystem.TotalVisibleMemorySize\n$MemoryUsed = ($FreeMemory/ $TotalMemory) * 100\n$PercentMemoryUsed = \"{0:N2}\" -f $MemoryUsed\n\n$objHostInfo = New-Object System.Object\n$objHostInfo | Add-Member -MemberType NoteProperty -Name CPULoadPercent -Value $ComputerCpu\n$objHostInfo | Add-Member -MemberType NoteProperty -Name MemoryUsedPercent -Value $PercentMemoryUsed\n\n# Lets output to the console\n$objHostInfo"
                             }, 
                             "timeout": {
-                                "__break_after": "true", 
-                                "__label": "Timeout", 
-                                "__option_tab": "Options", 
-                                "timeout": "", 
-                                "__input_type": "text"
-                            }, 
-                            "__snip": "command", 
-                            "__variables": "true"
-                        }, 
-                        "OutputRowDelimiter": 0, 
-                        "OutputParseType": 2, 
-                        "Description": "", 
-                        "OutputColumnDelimiter": 0, 
-                        "Codeblock": "MAIN", 
-                        "Commented": false, 
-                        "FunctionName": "winrm_cmd"
-                    }, 
-                    {
-                        "FunctionDefinition": {
-                            "start": {
-                                "__input_type": "text", 
-                                "start": "1"
-                            }, 
-                            "max": {
-                                "__input_type": "text", 
-                                "max": ""
-                            }, 
-                            "counter": {
-                                "__input_type": "text", 
-                                "counter": "z"
-                            }, 
-                            "__name": "loop", 
-                            "test": {
-                                "test": "<=", 
-                                "__input_type": "select"
-                            }, 
-                            "increment": {
-                                "__input_type": "text", 
-                                "increment": "1"
-                            }, 
-                            "compare_to": {
-                                "__input_type": "text", 
-                                "compare_to": "[[v1,*]]"
-                            }, 
-                            "action": {
-                                "function": {
-                                    "__snip": "message", 
-                                    "__name": "log_msg", 
-                                    "message": {
-                                        "__input_type": "textarea", 
-                                        "__label": "Log", 
-                                        "__required": "true", 
-                                        "__label_style": "display: block;", 
-                                        "__class": "w95pct", 
-                                        "message": "-[[v1,[[z]]]]- -[[v2,[[z]]]]- -[[v3,[[z]]]]- -[[v4,[[z]]]]- -[[v5,[[z]]]]- -[[v6,[[z]]]]-", 
-                                        "__rows": "2"
-                                    }
-                                }
+                                "timeout": ""
                             }
                         }, 
                         "OutputRowDelimiter": 0, 
-                        "OutputParseType": 0, 
-                        "Description": "", 
-                        "OutputColumnDelimiter": 0, 
-                        "Codeblock": "MAIN", 
-                        "Commented": false, 
-                        "FunctionName": "loop"
-                    }, 
-                    {
-                        "FunctionDefinition": {
-                            "__name": "set_variable", 
-                            "variables": {
-                                "variable": {
-                                    "modifier": {
-                                        "__input_type": "select", 
-                                        "modifier": "TO_BASE64_UTF16", 
-                                        "__label": "Modifier"
-                                    }, 
-                                    "__label": "Variable", 
-                                    "name": {
-                                        "__input_type": "text", 
-                                        "__label": "Name", 
-                                        "name": "s"
-                                    }, 
-                                    "value": {
-                                        "__input_type": "text", 
-                                        "__label": "Value", 
-                                        "value": "$HostInfo = @()\n\n$ProcessorStats = Get-WmiObject win32_processor -computer .\n$ComputerCpu = $ProcessorStats.LoadPercentage \n$OperatingSystem = Get-WmiObject win32_OperatingSystem -computer .\n$FreeMemory = $OperatingSystem.FreePhysicalMemory\n$TotalMemory = $OperatingSystem.TotalVisibleMemorySize\n$MemoryUsed = ($FreeMemory/ $TotalMemory) * 100\n$PercentMemoryUsed = \"{0:N2}\" -f $MemoryUsed\n\n$objHostInfo = New-Object System.Object\n$objHostInfo | Add-Member -MemberType NoteProperty -Name CPULoadPercent -Value $ComputerCpu\n$objHostInfo | Add-Member -MemberType NoteProperty -Name MemoryUsedPercent -Value $PercentMemoryUsed\n\n# Lets output to the console\n$objHostInfo"
-                                    }
-                                }, 
-                                "__label": "Variables"
-                            }
-                        }, 
-                        "OutputRowDelimiter": 0, 
-                        "OutputParseType": 0, 
-                        "Description": "", 
-                        "OutputColumnDelimiter": 0, 
-                        "Codeblock": "MAIN", 
-                        "Commented": false, 
-                        "FunctionName": "set_variable"
-                    }, 
-                    {
-                        "FunctionDefinition": {
-                            "conn_name": {
-                                "__input_type": "text", 
-                                "__label": "Connection", 
-                                "__connection_picker": "true", 
-                                "conn_name": "CONN1"
-                            }, 
-                            "__parse_method": "2", 
-                            "__name": "winrm_cmd", 
-                            "command": {
-                                "__input_type": "textarea", 
-                                "__label": "Command", 
-                                "__style": "display: block;", 
-                                "command": "powershell -encodedcommand [[s]]", 
-                                "__class": "w95pct", 
-                                "__rows": "3"
-                            }, 
-                            "timeout": {
-                                "__break_after": "true", 
-                                "__label": "Timeout", 
-                                "__option_tab": "Options", 
-                                "timeout": "", 
-                                "__input_type": "text"
-                            }, 
-                            "__snip": "command", 
-                            "__variables": "true"
-                        }, 
-                        "OutputRowDelimiter": 0, 
                         "OutputParseType": 2, 
-                        "Description": "", 
+                        "Description": "use winrm to print server perf metrics", 
                         "OutputColumnDelimiter": 0, 
                         "Codeblock": "MAIN", 
                         "Commented": false, 
-                        "FunctionName": "winrm_cmd"
+                        "FunctionName": "winrm_psh"
                     }
                 ], 
                 "Name": "MAIN"
